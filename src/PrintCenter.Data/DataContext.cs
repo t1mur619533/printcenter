@@ -51,6 +51,15 @@ namespace PrintCenter.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new CustomerConfiguration());
+            modelBuilder.ApplyConfiguration(new InvoiceConfiguration());
+            modelBuilder.ApplyConfiguration(new MaterialConfiguration());
+            modelBuilder.ApplyConfiguration(new PlanConfiguration());
+            modelBuilder.ApplyConfiguration(new RequestConfiguration());
+            modelBuilder.ApplyConfiguration(new SerialProductionConfiguration());
+            modelBuilder.ApplyConfiguration(new StreamConfiguration());
+            modelBuilder.ApplyConfiguration(new TechnologyConfiguration());
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
+            
             base.OnModelCreating(modelBuilder);
         }
     }
