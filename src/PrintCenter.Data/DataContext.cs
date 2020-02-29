@@ -26,7 +26,7 @@ namespace PrintCenter.Data
 
         public DbSet<User> Users { get; set; }
 
-        public DbSet<СompositeSerialProduction> CompositeSerialProductions { get; set; }
+        public DbSet<CompositeSerialProduction> CompositeSerialProductions { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options)
             : base(options)

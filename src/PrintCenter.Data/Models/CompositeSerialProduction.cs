@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace PrintCenter.Data.Models
 {
-    public class СompositeSerialProduction
+    public class CompositeSerialProduction
     {
         public int Id { get; set; }
 
