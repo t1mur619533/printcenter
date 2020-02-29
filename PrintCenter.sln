@@ -3,9 +3,44 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29503.13
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrintCenter.Api", "src\PrintCenter.Api\PrintCenter.Api.csproj", "{086FD478-5724-45C3-9947-34F201432B0D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrintCenter.Domain", "src\PrintCenter.Domain\PrintCenter.Domain.csproj", "{8650302B-0F15-4980-B1D2-164CC1173D78}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrintCenter.Data", "src\PrintCenter.Data\PrintCenter.Data.csproj", "{D218115B-C459-4B20-8723-2A085C796CBE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{2CC239C4-3C30-4634-A179-CC825021C13A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{9439A166-743B-4473-BA05-9C3A0B69D0CC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{BE416F1C-D060-41A7-8A80-E895D739B351}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{086FD478-5724-45C3-9947-34F201432B0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{086FD478-5724-45C3-9947-34F201432B0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{086FD478-5724-45C3-9947-34F201432B0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{086FD478-5724-45C3-9947-34F201432B0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8650302B-0F15-4980-B1D2-164CC1173D78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8650302B-0F15-4980-B1D2-164CC1173D78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8650302B-0F15-4980-B1D2-164CC1173D78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8650302B-0F15-4980-B1D2-164CC1173D78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D218115B-C459-4B20-8723-2A085C796CBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D218115B-C459-4B20-8723-2A085C796CBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D218115B-C459-4B20-8723-2A085C796CBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D218115B-C459-4B20-8723-2A085C796CBE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{086FD478-5724-45C3-9947-34F201432B0D} = {BE416F1C-D060-41A7-8A80-E895D739B351}
+		{8650302B-0F15-4980-B1D2-164CC1173D78} = {BE416F1C-D060-41A7-8A80-E895D739B351}
+		{D218115B-C459-4B20-8723-2A085C796CBE} = {BE416F1C-D060-41A7-8A80-E895D739B351}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B6CCE505-9409-4769-BE30-0C817DB524A3}
