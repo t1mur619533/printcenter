@@ -1,17 +1,17 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace PrintCenter.Data
 {
-	public interface IDataContext
-	{
-		int SaveChanges();
+    public interface IDataContext
+    {
+        int SaveChanges();
 
-		Task<int> SaveChangesAsync();
+        Task<int> SaveChangesAsync();
 
-		DbSet<T> DbSet<T>() where T : class;
+        DbSet<T> DbSet<T>() where T : class;
 
-		IQueryable<T> Query<T>() where T : class;
-	}
+        IQueryable<T> Query<T>() where T : class;
+    }
 }

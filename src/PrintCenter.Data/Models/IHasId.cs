@@ -1,7 +1,7 @@
-﻿namespace PrintCenter.Data.Models
+namespace PrintCenter.Data.Models
 {
-	public interface IHasId
-	{
-		int Id { get; }
-	}
+    public interface IHasId
+    {
+        int Id { get; }
+    }
 }
