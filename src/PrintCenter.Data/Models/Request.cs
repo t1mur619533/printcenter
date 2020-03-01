@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PrintCenter.Data.Models
 {
-    public class Request
+    public class Request : IHasId
     {
         public int Id { get; set; }
 

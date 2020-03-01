@@ -10,15 +10,15 @@ namespace PrintCenter.Data.Configurations
         public void Configure(EntityTypeBuilder<Technology> builder)
         {
             builder
-                .Property(b => b.Name)
+                .Property(t => t.Name)
                 .IsRequired();
 
             builder
-                .Property(b => b.Unit)
+                .Property(t => t.Unit)
                 .IsRequired();
 
             builder
-                .HasIndex(u => u.Name)
+                .HasIndex(t => t.Name)
                 .IsUnique();
         }
     }

@@ -9,8 +9,7 @@ namespace PrintCenter.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Request> builder)
         {
-            builder
-                .HasAlternateKey(i => i.Number);
+            builder.HasAlternateKey(r => r.Number);
         }
     }
 }

@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace PrintCenter.Data.Models
 {
-    public class User
+    public class User : IHasId
     {
         public int Id { get; set; }
 
@@ -14,10 +14,15 @@ namespace PrintCenter.Data.Models
         public string Surname { get; set; }
 
         public string Name { get; set; }
-
+        
         public Role Role { get; set; }
-
+        
         public List<Technology> Technologies { get; set; }
+
+        public User()
+        {
+            Technologies = new List<Technology>();
+        }
     }
 
     public enum Role

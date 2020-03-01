@@ -14,15 +14,19 @@ namespace PrintCenter.Data.Configurations
                 .IsRequired();
 
             builder
+                .HasIndex(u => u.Login)
+                .IsUnique();
+
+            builder
                 .Property(b => b.Password)
                 .IsRequired();
 
             builder
-                .Property(b => b.Surname)
-                .IsRequired();
-
-            builder
                 .Property(b => b.Name)
+                .IsRequired();
+            
+            builder
+                .Property(b => b.Surname)
                 .IsRequired();
         }
     }

@@ -26,7 +26,7 @@ namespace PrintCenter.Data.Configurations
                 .IsUnique();
 
            builder
-                .HasMany(b => b.Materials)
+                .HasMany(b => b.MaterialConsumptions)
                 .WithOne();
         }
     }

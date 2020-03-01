@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace PrintCenter.Data.Models
 {
-    public class SerialProduction
+    public class SerialProduction : IHasId
     {
         public int Id { get; set; }
 
@@ -19,13 +19,14 @@ namespace PrintCenter.Data.Models
         public string FilePath { get; set; }
 
         public string Description { get; set; }
-
-        public Material FirstMaterial { get; set; }
-
-        public Material SecondMaterial { get; set; }
-
-        public List<Material> Materials { get; set; }
-
+        
         public Technology Technology { get; set; }
+
+        public List<MaterialConsumption> MaterialConsumptions { get; set; }
+        
+        public SerialProduction()
+        {
+            MaterialConsumptions = new List<MaterialConsumption>();
+        }
     }
 }

@@ -1,6 +1,6 @@
 namespace PrintCenter.Data.Models
 {
-    public class Material
+    public class Material : IHasId
     {
         public int Id { get; set; }
 
