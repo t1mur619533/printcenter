@@ -11,10 +11,19 @@ namespace PrintCenter.Data.Configurations
             builder
                 .Property(b => b.Name)
                 .IsRequired();
-            
+
             builder
                 .HasIndex(u => u.Name)
                 .IsUnique();
+
+            builder.HasData(
+                new Customer
+                {
+                    Id = 1,
+                    Name = "Customer",
+                    Description = "Temp customer"
+                }
+            );
         }
     }
 }
