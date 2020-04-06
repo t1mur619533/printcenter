@@ -1,17 +1,18 @@
+using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PrintCenter.Data.Models;
 
 namespace PrintCenter.Data.Configurations
 {
-    class CustomerConfiguration : IEntityTypeConfiguration<Customer>
+    public class StreamConfiguration : IEntityTypeConfiguration<Stream>
     {
-        public void Configure(EntityTypeBuilder<Customer> builder)
+        public void Configure(EntityTypeBuilder<Stream> builder)
         {
             builder
                 .Property(b => b.Name)
                 .IsRequired();
-            
+
             builder
                 .HasIndex(u => u.Name)
                 .IsUnique();

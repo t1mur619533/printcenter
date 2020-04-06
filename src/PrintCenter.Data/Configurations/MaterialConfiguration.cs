@@ -1,19 +1,20 @@
+using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PrintCenter.Data.Models;
 
 namespace PrintCenter.Data.Configurations
 {
-    class CustomerConfiguration : IEntityTypeConfiguration<Customer>
+    public class MaterialConfiguration : IEntityTypeConfiguration<Material>
     {
-        public void Configure(EntityTypeBuilder<Customer> builder)
+        public void Configure(EntityTypeBuilder<Material> builder)
         {
-            builder
-                .Property(b => b.Name)
+           builder
+                .Property(m => m.Name)
                 .IsRequired();
-            
+
             builder
-                .HasIndex(u => u.Name)
+                .HasIndex(m => new { m.Name, m.Parameter })
                 .IsUnique();
         }
     }
