@@ -1,7 +1,5 @@
-using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,12 +22,17 @@ namespace PrintCenter.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContext<DataContext>(builder => builder.UseInMemoryDatabase(Guid.NewGuid().ToString()));
+            //services.AddDbContext<DataContext>(builder => builder.UseInMemoryDatabase(Guid.NewGuid().ToString()));
+            var connection = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<DataContext>(builder => builder.UseNpgsql(connection));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            using var scope = app.ApplicationServices.CreateScope();
+            scope.ServiceProvider.GetRequiredService<DataContext>().Database.Migrate();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
