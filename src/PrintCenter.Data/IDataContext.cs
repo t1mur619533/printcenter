@@ -1,14 +1,15 @@
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace PrintCenter.Data
 {
-    public interface IDataContext
+    public interface IDataContext : ITransaction
     {
         int SaveChanges();
 
-        Task<int> SaveChangesAsync();
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
         DbSet<T> DbSet<T>() where T : class;
 

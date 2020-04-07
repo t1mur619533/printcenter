@@ -1,6 +1,7 @@
+using System.Data;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using PrintCenter.Data.Configurations;
 using PrintCenter.Data.Models;
 
@@ -8,6 +9,8 @@ namespace PrintCenter.Data
 {
     public sealed class DataContext : DbContext, IDataContext
     {
+        private IDbContextTransaction currentTransaction;
+
         public DbSet<User> Users { get; set; }
         
         public DbSet<Customer> Customers { get; set; }
@@ -35,11 +38,6 @@ namespace PrintCenter.Data
         {
         }
 
-        public async Task<int> SaveChangesAsync()
-        {
-            return await base.SaveChangesAsync();
-        }
-
         public DbSet<T> DbSet<T>() where T : class
         {
             return Set<T>();
@@ -65,6 +63,56 @@ namespace PrintCenter.Data
                 .ApplyConfiguration(new MaterialConsumptionConfiguration());
             
             base.OnModelCreating(modelBuilder);
+        }
+
+        public void Begin()
+        {
+            if (currentTransaction != null)
+            {
+                return;
+            }
+
+            if (!Database.IsInMemory())
+            {
+                currentTransaction = Database.BeginTransaction(IsolationLevel.ReadCommitted);
+            }
+        }
+
+        public void Commit()
+        {
+            try
+            {
+                currentTransaction?.Commit();
+            }
+            catch
+            {
+                Rollback();
+                throw;
+            }
+            finally
+            {
+                if (currentTransaction != null)
+                {
+                    currentTransaction.Dispose();
+                    currentTransaction = null;
+                }
+            }
+        }
+
+        public void Rollback()
+        {
+            try
+            {
+                currentTransaction?.Rollback();
+            }
+            finally
+            {
+                if (currentTransaction != null)
+                {
+                    currentTransaction.Dispose();
+                    currentTransaction = null;
+                }
+            }
         }
     }
 }
