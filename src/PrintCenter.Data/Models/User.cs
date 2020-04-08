@@ -13,10 +13,7 @@ namespace PrintCenter.Data.Models
         public string Login { get; set; }
 
         [JsonIgnore]
-        public byte[] Hash { get; set; }
-
-        [JsonIgnore]
-        public byte[] Salt { get; set; }
+        public string PasswordHash { get; set; }
 
         public string Surname { get; set; }
 

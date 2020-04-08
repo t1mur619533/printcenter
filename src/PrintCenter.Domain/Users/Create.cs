@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PrintCenter.Data;
 using PrintCenter.Data.Models;
@@ -53,12 +54,14 @@ namespace PrintCenter.Domain.Users
         public class Handler : IRequestHandler<Command, UserEnvelope>
         {
             private readonly IDataContext context;
+            private readonly IPasswordHasher<Data.Models.User> hasher;
             private readonly IMapper mapper;
 
-            public Handler(IDataContext context, IMapper mapper)
+            public Handler(IDataContext context, IMapper mapper, IPasswordHasher<Data.Models.User> hasher)
             {
                 this.context = context;
                 this.mapper = mapper;
+                this.hasher = hasher;
             }
 
             public async Task<UserEnvelope> Handle(Command command, CancellationToken cancellationToken)
@@ -66,13 +69,19 @@ namespace PrintCenter.Domain.Users
                 if (await context.DbSet<User>().Where(x => x.Login == command.UserDto.Login)
                     .AnyAsync(cancellationToken))
                 {
-                    throw new ArgumentException("User with same login already exits");
+                    throw new ArgumentException($"User with login {command.UserDto.Login} already exits.");
                 }
 
-                var user = mapper.Map<User>(command.UserDto);
-                await context.DbSet<User>().AddAsync(user, cancellationToken);
+                var user = mapper.Map<Data.Models.User>(command.UserDto);
+                user.PasswordHash = hasher.HashPassword(user, command.UserDto.Password);
+
+                await context.DbSet<Data.Models.User>().AddAsync(user, cancellationToken);
+
                 await context.SaveChangesAsync(cancellationToken);
+
                 var userDto = mapper.Map<User>(user);
+                userDto.Token = "token";
+
                 return new UserEnvelope(userDto);
             }
         }

@@ -17,13 +17,9 @@ namespace PrintCenter.Data.Configurations
                 .IsUnique();
 
             builder
-                .Property(b => b.Hash)
+                .Property(b => b.PasswordHash)
                 .IsRequired();
             
-            builder
-                .Property(b => b.Salt)
-                .IsRequired();
-
             builder
                 .Property(b => b.Name)
                 .IsRequired();

@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using PrintCenter.Domain.Users;
 
 namespace PrintCenter.Api.Controllers
 {
@@ -31,8 +33,9 @@ namespace PrintCenter.Api.Controllers
 
         // POST: api/Users
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<UserEnvelope> Post([FromBody] Create.Command command)
         {
+            return await mediator.Send(command);
         }
 
         // PUT: api/Users/5

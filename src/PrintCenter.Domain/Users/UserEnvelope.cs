@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using PrintCenter.Data.Models;
 
 namespace PrintCenter.Domain.Users
 {
@@ -21,5 +20,18 @@ namespace PrintCenter.Domain.Users
         {
             User = user;
         }
+    }
+
+    public class User
+    {
+        public string Login { get; set; }
+
+        public string Name { get; set; }
+
+        public string Surname { get; set; }
+
+        public string Role { get; set; }
+
+        public string Token { get; set; }
     }
 }
