@@ -1,7 +1,6 @@
 using System.Data;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using PrintCenter.Data.Configurations;
@@ -23,6 +22,8 @@ namespace PrintCenter.Data
 
         public DbSet<CompositeSerialProduction> CompositeSerialProductions { get; set; }
 
+        public DbSet<CompositeSerialProductionSerialProduction> CompositeSerialProductionSerialProductions { get; set; }
+
         public DbSet<Stream> Streams { get; set; }
         
         public DbSet<Invoice> Invoices { get; set; }
@@ -34,6 +35,10 @@ namespace PrintCenter.Data
         public DbSet<Technology> Technologies { get; set; }
         
         public DbSet<MaterialConsumption> MaterialConsumptions { get; set; }
+
+        public DbSet<MaterialConsumptionSerialProduction> MaterialConsumptionSerialProductions { get; set; }
+
+        public DbSet<MaterialConsumptionStream> MaterialConsumptionStreams { get; set; }
 
         public DbSet<MaterialMovement> MaterialMovements { get; set; }
 

@@ -69,8 +69,8 @@ namespace PrintCenter.Domain.Users
                     throw new ArgumentException("User with same login already exits");
                 }
 
-                var user = mapper.Map<Data.Models.User>(command.UserDto);
-                await context.DbSet<Data.Models.User>().AddAsync(user, cancellationToken);
+                var user = mapper.Map<User>(command.UserDto);
+                await context.DbSet<User>().AddAsync(user, cancellationToken);
                 await context.SaveChangesAsync(cancellationToken);
                 var userDto = mapper.Map<User>(user);
                 return new UserEnvelope(userDto);
