@@ -1,11 +1,15 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using PrintCenter.Data;
+using PrintCenter.Infrastructure.Accessors;
+using PrintCenter.Infrastructure.Security;
 
 namespace PrintCenter.Api
 {
@@ -27,13 +31,19 @@ namespace PrintCenter.Api
 
             var connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<DataContext>(builder => builder.UseNpgsql(connection));
+            services.AddScoped<IDataContext>(provider => provider.GetRequiredService<DataContext>());
+            services.AddScoped<ITransaction>(provider => provider.GetRequiredService<DataContext>());
+
+            services.AddScoped(typeof(IPasswordHasher<>), typeof(PasswordHasher<>));
+            services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+            services.AddScoped<ICurrentUserAccessor, CurrentUserAccessor>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddMediatR();
             services.AddAutoMapper();
-
             services.AddControllers();
-
             services.AddSwagger();
+            services.AddJwt(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -17,37 +16,17 @@ namespace PrintCenter.Api.Controllers
             this.mediator = mediator;
         }
 
-        // GET: api/Users
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET: api/Users/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST: api/Users
         [HttpPost]
-        public async Task<UserEnvelope> Post([FromBody] Create.Command command)
+        public async Task Create([FromBody] Create.Command command)
+        {
+            await mediator.Send(command);
+        }
+
+
+        [HttpPost("login")]
+        public async Task<UserEnvelope> Login([FromBody] Login.Command command)
         {
             return await mediator.Send(command);
-        }
-
-        // PUT: api/Users/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

@@ -1,5 +1,5 @@
-using System;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PrintCenter.Data;
 using PrintCenter.Data.Models;
+using PrintCenter.Domain.Exceptions;
 
 namespace PrintCenter.Domain.Users
 {
@@ -38,7 +39,7 @@ namespace PrintCenter.Domain.Users
             }
         }
 
-        public class Command : IRequest<UserEnvelope>
+        public class Command : IRequest
         {
             public UserDto UserDto { get; set; }
         }
@@ -51,7 +52,7 @@ namespace PrintCenter.Domain.Users
             }
         }
 
-        public class Handler : IRequestHandler<Command, UserEnvelope>
+        public class Handler : IRequestHandler<Command>
         {
             private readonly IDataContext context;
             private readonly IPasswordHasher<Data.Models.User> hasher;
@@ -64,12 +65,12 @@ namespace PrintCenter.Domain.Users
                 this.hasher = hasher;
             }
 
-            public async Task<UserEnvelope> Handle(Command command, CancellationToken cancellationToken)
+            public async Task<Unit> Handle(Command command, CancellationToken cancellationToken)
             {
-                if (await context.DbSet<User>().Where(x => x.Login == command.UserDto.Login)
+                if (await context.DbSet<Data.Models.User>().Where(x => x.Login == command.UserDto.Login)
                     .AnyAsync(cancellationToken))
                 {
-                    throw new ArgumentException($"User with login {command.UserDto.Login} already exits.");
+                    throw new RestException(HttpStatusCode.BadRequest,$"User with login {command.UserDto.Login} already exits.");
                 }
 
                 var user = mapper.Map<Data.Models.User>(command.UserDto);
@@ -79,10 +80,7 @@ namespace PrintCenter.Domain.Users
 
                 await context.SaveChangesAsync(cancellationToken);
 
-                var userDto = mapper.Map<User>(user);
-                userDto.Token = "token";
-
-                return new UserEnvelope(userDto);
+                return Unit.Value;
             }
         }
     }

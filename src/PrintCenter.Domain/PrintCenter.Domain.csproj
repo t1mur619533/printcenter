@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PrintCenter.Data\PrintCenter.Data.csproj" />
+    <ProjectReference Include="..\PrintCenter.Infrastructure\PrintCenter.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

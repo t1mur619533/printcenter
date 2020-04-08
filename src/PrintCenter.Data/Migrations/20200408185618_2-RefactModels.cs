@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Migrations;
+// ReSharper disable All
 
 namespace PrintCenter.Data.Migrations
 {
