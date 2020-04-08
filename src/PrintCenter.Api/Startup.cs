@@ -28,6 +28,9 @@ namespace PrintCenter.Api
             var connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<DataContext>(builder => builder.UseNpgsql(connection));
 
+            services.AddMediatR();
+            services.AddAutoMapper();
+
             services.AddControllers();
 
             services.AddSwagger();
