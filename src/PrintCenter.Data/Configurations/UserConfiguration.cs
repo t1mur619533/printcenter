@@ -32,16 +32,6 @@ namespace PrintCenter.Data.Configurations
             builder
                 .Property(b => b.Surname)
                 .IsRequired();
-
-            builder.HasData(new User
-            {
-                Id = 1,
-                Login = "admin",
-                Password = "admin",
-                Name = "admin",
-                Surname = "admin",
-                Role = Role.SuperAdmin
-            });
         }
     }
 }
