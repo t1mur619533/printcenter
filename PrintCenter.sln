@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{9439A166
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{BE416F1C-D060-41A7-8A80-E895D739B351}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrintCenter.Infrastructure", "src\PrintCenter.Infrastructure\PrintCenter.Infrastructure.csproj", "{491C0005-A9FC-4252-B667-AD39A82989D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrintCenter.Infrastructure", "src\PrintCenter.Infrastructure\PrintCenter.Infrastructure.csproj", "{491C0005-A9FC-4252-B667-AD39A82989D8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
