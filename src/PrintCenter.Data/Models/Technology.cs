@@ -1,9 +1,11 @@
+using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
 namespace PrintCenter.Data.Models
 {
     public class Technology : IHasId
     {
+        [JsonIgnore]
         public int Id { get; set; }
 
         public string Name { get; set; }

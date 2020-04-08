@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Text.Json.Serialization;
 
 namespace PrintCenter.Data.Models
 {
@@ -9,7 +10,11 @@ namespace PrintCenter.Data.Models
 
         public string Login { get; set; }
 
-        public string Password { get; set; }
+        [JsonIgnore]
+        public byte[] Hash { get; set; }
+
+        [JsonIgnore]
+        public byte[] Salt { get; set; }
 
         public string Surname { get; set; }
 
