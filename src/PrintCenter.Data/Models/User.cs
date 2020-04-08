@@ -17,29 +17,32 @@ namespace PrintCenter.Data.Models
         
         public Role Role { get; set; }
         
-        public List<Technology> Technologies { get; set; }
+        public List<UserTechnology> UserTechnologies { get; set; }
 
-        public User()
-        {
-            Technologies = new List<Technology>();
-        }
+        public List<MaterialMovement> MaterialMovements { get; set; }
+
+        public List<Plan> Plans { get; set; }
+
+        public List<Request> Requests { get; set; }
+
+        public List<Invoice> Invoices { get; set; }
     }
 
     public enum Role
     {
         [Description("Неaктивен")]
-        Disable,
+        Disable = 0,
 
         [Description("Менеджер")]
-        Manager,
+        Manager = 1,
 
         [Description("Печатник")]
-        Printer,
+        Printer = 2,
 
         [Description("Админ")]
-        Admin,
+        Admin = 3,
 
         [Description("СуперАдмин")]
-        SuperAdmin
+        SuperAdmin = 4
     }
 }

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace PrintCenter.Data.Models
 {
     public class Customer : IHasId
@@ -7,5 +9,7 @@ namespace PrintCenter.Data.Models
         public string Name { get; set; }
 
         public string Description { get; set; }
+
+        //public List<Stream> Streams { get; set; }
     }
 }

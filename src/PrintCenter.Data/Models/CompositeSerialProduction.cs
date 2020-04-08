@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace PrintCenter.Data.Models
 {
@@ -12,11 +15,10 @@ namespace PrintCenter.Data.Models
 
         public int PackageSize { get; set; }
 
-        public List<SerialProduction> SerialProductions { get; set; }
+        [JsonIgnore]
+        public List<CompositeSerialProductionSerialProduction> CompositeSerialProductionSerialProductions { get; set; }
 
-        public CompositeSerialProduction()
-        {
-            SerialProductions = new List<SerialProduction>();
-        }
+        [NotMapped]
+        public List<SerialProduction> SerialProductions => CompositeSerialProductionSerialProductions.Where(production => production.CompositeSerialProductionId.Equals(Id)).Select(production => production.SerialProduction).ToList();
     }
 }

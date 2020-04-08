@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace PrintCenter.Data.Models
 {
@@ -22,11 +25,17 @@ namespace PrintCenter.Data.Models
         
         public Technology Technology { get; set; }
 
-        public List<MaterialConsumption> MaterialConsumptions { get; set; }
-        
-        public SerialProduction()
-        {
-            MaterialConsumptions = new List<MaterialConsumption>();
-        }
+        [JsonIgnore]
+        public List<CompositeSerialProductionSerialProduction> CompositeSerialProductionSerialProductions { get; set; }
+
+        [NotMapped]
+        public List<CompositeSerialProduction> CompositeSerialProduction => CompositeSerialProductionSerialProductions.Where(production => production.SerialProductionId.Equals(Id)).Select(production => production.CompositeSerialProduction).ToList();
+
+        [JsonIgnore]
+        public List<MaterialConsumptionSerialProduction> MaterialConsumptionSerialProductions { get; set; }
+
+        [NotMapped]
+        public List<MaterialConsumption> MaterialConsumptions => MaterialConsumptionSerialProductions.Where(production => production.SerialProductionId.Equals(Id)).Select(production => production.MaterialConsumption).ToList();
+
     }
 }

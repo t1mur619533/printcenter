@@ -21,15 +21,13 @@ namespace PrintCenter.Data.Models
 
         public string Description { get; set; }
 
-        public Technology Technology { get; set; }
-        
-        public List<MaterialConsumption> MaterialConsumptions { get; set; }
-
         public int PackagesCount { get; set; }
 
         public string YaltaNumber { get; set; }
 
         public string YaltaPosition { get; set; }
+
+        public Technology Technology { get; set; }
 
         public Customer Customer { get; set; }
 
@@ -39,27 +37,24 @@ namespace PrintCenter.Data.Models
 
         public Invoice Invoice { get; set; }
 
-        public Stream()
-        {
-            MaterialConsumptions = new List<MaterialConsumption>();
-        }
+        public List<MaterialConsumptionStream> MaterialConsumptionStreams { get; set; }
     }
 
     public enum Priority
     {
         [Description("Низкий")]
-        Low,
+        Low = 0,
 
         [Description("Ниже среднего")]
-        BelowAverage,
+        BelowAverage = 1,
 
         [Description("Средний")]
-        Average,
+        Average = 2,
 
         [Description("Выше среднего")]
-        AboveAverage,
+        AboveAverage = 3,
 
         [Description("Высокий")]
-        High
+        High = 4
     }
 }

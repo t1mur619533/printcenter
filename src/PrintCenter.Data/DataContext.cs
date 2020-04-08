@@ -1,5 +1,7 @@
 using System.Data;
 using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using PrintCenter.Data.Configurations;
@@ -33,6 +35,12 @@ namespace PrintCenter.Data
         
         public DbSet<MaterialConsumption> MaterialConsumptions { get; set; }
 
+        public DbSet<MaterialMovement> MaterialMovements { get; set; }
+
+        public DbSet<Notification> Notifications { get; set; }
+
+        public DbSet<UserTechnology> UserTechnologies { get; set; }
+
         public DataContext(DbContextOptions<DataContext> options)
             : base(options)
         {
@@ -51,16 +59,7 @@ namespace PrintCenter.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .ApplyConfiguration(new CustomerConfiguration())
-                .ApplyConfiguration(new InvoiceConfiguration())
-                .ApplyConfiguration(new MaterialConfiguration())
-                .ApplyConfiguration(new PlanConfiguration())
-                .ApplyConfiguration(new RequestConfiguration())
-                .ApplyConfiguration(new SerialProductionConfiguration())
-                .ApplyConfiguration(new StreamConfiguration())
-                .ApplyConfiguration(new TechnologyConfiguration())
-                .ApplyConfiguration(new UserConfiguration())
-                .ApplyConfiguration(new MaterialConsumptionConfiguration());
+                .ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(UserConfiguration)));
             
             base.OnModelCreating(modelBuilder);
         }

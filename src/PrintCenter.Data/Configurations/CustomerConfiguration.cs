@@ -15,15 +15,6 @@ namespace PrintCenter.Data.Configurations
             builder
                 .HasIndex(u => u.Name)
                 .IsUnique();
-
-            builder.HasData(
-                new Customer
-                {
-                    Id = 1,
-                    Name = "Customer",
-                    Description = "Temp customer"
-                }
-            );
         }
     }
 }
