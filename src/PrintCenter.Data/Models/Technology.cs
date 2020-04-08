@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace PrintCenter.Data.Models
 {
     public class Technology : IHasId
@@ -9,5 +11,7 @@ namespace PrintCenter.Data.Models
         public string Unit { get; set; }
 
         public string Description { get; set; }
+
+        public List<UserTechnology> UserTechnologies { get; set; }
     }
 }

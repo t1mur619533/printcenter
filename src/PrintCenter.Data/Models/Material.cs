@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace PrintCenter.Data.Models
 {
     public class Material : IHasId
@@ -19,5 +21,9 @@ namespace PrintCenter.Data.Models
         public double NormalCount { get; set; }
 
         public double MinimalCount { get; set; }
+
+        public List<MaterialMovement> MaterialMovements { get; set; }
+
+        public List<MaterialConsumption> MaterialConsumptions { get; set; }
     }
 }
