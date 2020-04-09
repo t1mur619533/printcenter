@@ -33,13 +33,13 @@ namespace PrintCenter.Domain.Customers
                 this.mapper = mapper;
             }
 
-            public async Task<CustomersEnvelope> Handle(Query message, CancellationToken cancellationToken)
+            public async Task<CustomersEnvelope> Handle(Query query, CancellationToken cancellationToken)
             {
                 var queryable = context.Customers;
 
                 var customers = await queryable
-                    .Skip(message.Offset ?? 0)
-                    .Take(message.Limit ?? 20)
+                    .Skip(query.Offset ?? 0)
+                    .Take(query.Limit ?? 20)
                     .AsNoTracking()
                     .ToListAsync(cancellationToken);
 

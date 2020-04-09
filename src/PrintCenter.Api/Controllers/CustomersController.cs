@@ -16,7 +16,6 @@ namespace PrintCenter.Api.Controllers
             this.mediator = mediator;
         }
 
-        // GET: api/Customers
         [HttpGet]
         public async Task<CustomersEnvelope> Get([FromQuery] int? limit, [FromQuery] int? offset)
         {
@@ -35,5 +34,17 @@ namespace PrintCenter.Api.Controllers
             return await mediator.Send(new Details.Query(id));
         }
         
+        [HttpPut("{id}")]
+        public async Task Edit(int id, [FromBody]Edit.Command command)
+        {
+            command.Id = id;
+            await mediator.Send(command);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task Delete(int id)
+        {
+            await mediator.Send(new Delete.Command(id));
+        }
     }
 }
