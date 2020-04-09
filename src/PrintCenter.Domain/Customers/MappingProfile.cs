@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 
 namespace PrintCenter.Domain.Customers
 {
@@ -6,7 +6,7 @@ namespace PrintCenter.Domain.Customers
     {
         public MappingProfile()
         {
-            CreateMap<Create.CustomerDto, Data.Models.User>(MemberList.None);
+            CreateMap<Create.CustomerDto, Data.Models.Customer>(MemberList.None);
             CreateMap<Data.Models.Customer, Customer>(MemberList.None);
         }
     }

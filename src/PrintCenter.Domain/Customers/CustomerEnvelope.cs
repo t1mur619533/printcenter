@@ -1,5 +1,3 @@
-﻿using PrintCenter.Data.Models;
-
 namespace PrintCenter.Domain.Customers
 {
     public class CustomerEnvelope

@@ -1,14 +1,12 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PrintCenter.Data;
-using PrintCenter.Data.Models;
 using PrintCenter.Domain.Exceptions;
 
 namespace PrintCenter.Domain.Customers
@@ -30,7 +28,7 @@ namespace PrintCenter.Domain.Customers
             }
         }
         
-        public class Command : IRequest<Customer>, IRequest<Unit>
+        public class Command : IRequest
         {
             public CustomerDto CustomerDto { get; set; }
         }

@@ -1,11 +1,11 @@
-﻿using System.Linq;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PrintCenter.Data;
-using PrintCenter.Infrastructure.Accessors;
 
 namespace PrintCenter.Domain.Customers
 {
@@ -25,10 +25,12 @@ namespace PrintCenter.Domain.Customers
         public class QueryHandler : IRequestHandler<Query, CustomersEnvelope>
         {
             private readonly DataContext context;
+            private readonly IMapper mapper;
 
-            public QueryHandler(DataContext context, IMapper mapper, ICurrentUserAccessor currentUserAccessor)
+            public QueryHandler(DataContext context, IMapper mapper)
             {
                 this.context = context;
+                this.mapper = mapper;
             }
 
             public async Task<CustomersEnvelope> Handle(Query message, CancellationToken cancellationToken)
@@ -43,7 +45,7 @@ namespace PrintCenter.Domain.Customers
 
                 return new CustomersEnvelope()
                 {
-                    Customers = customers
+                    Customers = mapper.Map<List<Customer>>(customers)
                 };
             }
         }
