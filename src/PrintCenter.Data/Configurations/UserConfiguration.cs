@@ -1,4 +1,3 @@
-using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PrintCenter.Data.Models;
@@ -18,13 +17,9 @@ namespace PrintCenter.Data.Configurations
                 .IsUnique();
 
             builder
-                .Property(b => b.Hash)
+                .Property(b => b.PasswordHash)
                 .IsRequired();
             
-            builder
-                .Property(b => b.Salt)
-                .IsRequired();
-
             builder
                 .Property(b => b.Name)
                 .IsRequired();

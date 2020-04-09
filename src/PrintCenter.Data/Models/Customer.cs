@@ -10,6 +10,6 @@ namespace PrintCenter.Data.Models
 
         public string Description { get; set; }
 
-        //public List<Stream> Streams { get; set; }
+        public List<Stream> Streams { get; set; }
     }
 }
