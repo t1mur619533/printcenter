@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 
 namespace PrintCenter.Infrastructure.Accessors
@@ -6,6 +8,7 @@ namespace PrintCenter.Infrastructure.Accessors
     public class CurrentUserAccessor : ICurrentUserAccessor
     {
         private readonly IHttpContextAccessor httpContextAccessor;
+        private IEnumerable<Claim> Claims => httpContextAccessor?.HttpContext?.User?.Claims;
 
         public CurrentUserAccessor(IHttpContextAccessor httpContextAccessor)
         {
@@ -14,12 +17,12 @@ namespace PrintCenter.Infrastructure.Accessors
 
         public string GetUsername()
         {
-            return httpContextAccessor.HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == "login")?.Value;
+            return Claims?.FirstOrDefault(x => x.Type == ClaimsIdentity.DefaultNameClaimType)?.Value;
         }
 
         public string GetRole()
         {
-            return httpContextAccessor.HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == "role")?.Value;
+            return Claims?.FirstOrDefault(x => x.Type == ClaimsIdentity.DefaultRoleClaimType)?.Value;
         }
     }
 }
