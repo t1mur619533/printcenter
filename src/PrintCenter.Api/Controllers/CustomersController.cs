@@ -1,10 +1,7 @@
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PrintCenter.Data;
-using PrintCenter.Data.Models;
+using PrintCenter.Domain.Customers;
 
 namespace PrintCenter.Api.Controllers
 {
@@ -12,97 +9,31 @@ namespace PrintCenter.Api.Controllers
     [ApiController]
     public class CustomersController : ControllerBase
     {
-        private readonly DataContext context;
+        private readonly IMediator mediator;
 
-        public CustomersController(DataContext context)
+        public CustomersController(IMediator mediator)
         {
-            this.context = context;
+            this.mediator = mediator;
         }
 
         // GET: api/Customers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
+        public async Task<CustomersEnvelope> Get([FromQuery] int? limit, [FromQuery] int? offset)
         {
-            return await context.Customers.ToListAsync();
+            return await mediator.Send(new List.Query(limit, offset));
         }
-
-        // GET: api/Customers/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Customer>> GetCustomer(int id)
-        {
-            var customer = await context.Customers.FindAsync(id);
-
-            if (customer == null)
-            {
-                return NotFound();
-            }
-
-            return customer;
-        }
-
-        // PUT: api/Customers/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCustomer(int id, Customer customer)
-        {
-            if (id != customer.Id)
-            {
-                return BadRequest();
-            }
-
-            context.Entry(customer).State = EntityState.Modified;
-
-            try
-            {
-                await context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CustomerExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Customers
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        
         [HttpPost]
-        public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
+        public async Task Create([FromBody]Create.Command command)
         {
-            context.Customers.Add(customer);
-            await context.SaveChangesAsync();
-
-            return CreatedAtAction("GetCustomer", new { id = customer.Id }, customer);
+            await mediator.Send(command);
         }
-
-        // DELETE: api/Customers/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Customer>> DeleteCustomer(int id)
+        
+        [HttpGet("{id}")]
+        public async Task<CustomerEnvelope> Get(int id)
         {
-            var customer = await context.Customers.FindAsync(id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
-
-            context.Customers.Remove(customer);
-            await context.SaveChangesAsync();
-
-            return customer;
+            return await mediator.Send(new Details.Query(id));
         }
-
-        private bool CustomerExists(int id)
-        {
-            return context.Customers.Any(e => e.Id == id);
-        }
+        
     }
 }
