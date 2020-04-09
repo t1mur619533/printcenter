@@ -24,8 +24,8 @@ namespace PrintCenter.Infrastructure.Security
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim("login", username),
-                    new Claim("role", role)
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, username),
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType, role)
                 }),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
                     SecurityAlgorithms.HmacSha256Signature),

@@ -26,6 +26,26 @@ namespace PrintCenter.Api
         {
             services.AddSwaggerGen(c =>
             {
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please insert JWT with Bearer into field",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    BearerFormat = "JWT"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference {Type = ReferenceType.SecurityScheme, Id = "Bearer"}
+                        },
+                        new string[] { }
+                    }
+                });
+
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
@@ -52,11 +72,12 @@ namespace PrintCenter.Api
 
         public static IServiceCollection AddAutoMapper(this IServiceCollection services)
         {
-            services.AddAutoMapper(Assembly.GetExecutingAssembly(), Assembly.GetAssembly(typeof(UsersEnvelope)), Assembly.GetAssembly(typeof(User)));
+            services.AddAutoMapper(Assembly.GetExecutingAssembly(), Assembly.GetAssembly(typeof(UsersEnvelope)),
+                Assembly.GetAssembly(typeof(User)));
             return services;
         }
 
-        public static void AddJwt(this IServiceCollection services, IConfiguration configuration)
+        public static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddAuthentication(x =>
                 {
@@ -73,6 +94,18 @@ namespace PrintCenter.Api
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["Secret"])),
                         ValidateIssuer = false,
                         ValidateAudience = false
+                    };
+                    x.Events = new JwtBearerEvents()
+                    {
+                        OnMessageReceived = (context) =>
+                        {
+                            var token = context.HttpContext.Request.Headers["Authorization"];
+                            if (token.Count > 0 && token[0].StartsWith("Token ", StringComparison.OrdinalIgnoreCase))
+                            {
+                                context.Token = token[0].Substring("Token ".Length).Trim();
+                            }
+                            return Task.CompletedTask;
+                        }
                     };
                 });
         }
@@ -97,8 +130,11 @@ namespace PrintCenter.Api
                 .MinimumLevel.Information()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                 .Enrich.FromLogContext()
-                .WriteTo.Console(outputTemplate: "{Timestamp:HH:mm:ss} [{Level}] {SourceContext} {Message}{NewLine}{Exception}", theme: AnsiConsoleTheme.Code)
-                .WriteTo.File($"Logs/{Assembly.GetExecutingAssembly().GetName().Name} - {DateTime.Now:dd.MM.yyyy(HH.mm.ss)}.log")
+                .WriteTo.Console(
+                    outputTemplate: "{Timestamp:HH:mm:ss} [{Level}] {SourceContext} {Message}{NewLine}{Exception}",
+                    theme: AnsiConsoleTheme.Code)
+                .WriteTo.File(
+                    $"Logs/{Assembly.GetExecutingAssembly().GetName().Name} - {DateTime.Now:dd.MM.yyyy(HH.mm.ss)}.log")
                 .CreateLogger();
 
             loggerFactory.AddSerilog(log);

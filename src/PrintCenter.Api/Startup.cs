@@ -43,7 +43,8 @@ namespace PrintCenter.Api
             services.AddAutoMapper();
             services.AddControllers();
             services.AddSwagger();
-            services.AddJwt(Configuration);
+            services.AddJwtAuthentication(Configuration);
+            services.AddAuthorization();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -69,6 +70,8 @@ namespace PrintCenter.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
