@@ -1,7 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Extensions;
+using PrintCenter.Data.Models;
 using PrintCenter.Domain.Users;
 
 namespace PrintCenter.Api.Controllers
@@ -25,12 +30,19 @@ namespace PrintCenter.Api.Controllers
             await mediator.Send(command);
         }
 
-
         [HttpPost("login")]
         [AllowAnonymous]
         public async Task<UserEnvelope> Login([FromBody] Login.Command command)
         {
             return await mediator.Send(command);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "SuperAdmin")]
+        public async Task<List<Tuple<string, Role>>> GetAvailableRoles()
+        {
+            return await Task.FromResult(Enum.GetNames(typeof(Role)).Select(s =>
+                new Tuple<string, Role>(Enum.Parse<Role>(s).GetDisplayName(), Enum.Parse<Role>(s))).ToList());
         }
     }
 }

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text.Json.Serialization;
@@ -42,19 +42,19 @@ namespace PrintCenter.Data.Models
 
     public enum Role
     {
-        [Description("Неaктивен")]
+        [Display(Name = "Неaктивен")]
         Disable = 0,
 
-        [Description("Менеджер")]
+        [Display(Name = "Менеджер")]
         Manager = 1,
 
-        [Description("Печатник")]
+        [Display(Name = "Печатник")]
         Printer = 2,
 
-        [Description("Админ")]
+        [Display(Name = "Админ")]
         Admin = 3,
 
-        [Description("СуперАдмин")]
+        [Display(Name = "СуперАдмин")]
         SuperAdmin = 4
     }
 }

@@ -77,7 +77,7 @@ namespace PrintCenter.Domain.Users
                 var userDto = mapper.Map<User>(user);
                 userDto.Token = jwtTokenGenerator.CreateToken(user.Login, user.Role.ToString());
 
-                return new UserEnvelope {User = userDto};
+                return new UserEnvelope(userDto);
             }
         }
     }
