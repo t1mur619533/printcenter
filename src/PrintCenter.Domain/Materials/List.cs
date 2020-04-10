@@ -7,11 +7,11 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PrintCenter.Data;
 
-namespace PrintCenter.Domain.Customers
+namespace PrintCenter.Domain.Materials
 {
     public class List
     {
-        public class Query : IRequest<CustomersEnvelope>
+        public class Query : IRequest<MaterialsEnvelope>
         {
             public Query(int? limit, int? offset)
             {
@@ -21,8 +21,8 @@ namespace PrintCenter.Domain.Customers
             public int? Limit { get; }
             public int? Offset { get; }
         }
-        
-        public class QueryHandler : IRequestHandler<Query, CustomersEnvelope>
+
+        public class QueryHandler : IRequestHandler<Query, MaterialsEnvelope>
         {
             private readonly DataContext context;
             private readonly IMapper mapper;
@@ -33,18 +33,16 @@ namespace PrintCenter.Domain.Customers
                 this.mapper = mapper;
             }
 
-            public async Task<CustomersEnvelope> Handle(Query query, CancellationToken cancellationToken)
+            public async Task<MaterialsEnvelope> Handle(Query query, CancellationToken cancellationToken)
             {
-                var customers = await context.Customers
+                var materials = await context.Materials
                     .Skip(query.Offset ?? 0)
                     .Take(query.Limit ?? 20)
                     .AsNoTracking()
                     .ToListAsync(cancellationToken);
 
-                return new CustomersEnvelope(mapper.Map<List<Customer>>(customers));
+                return new MaterialsEnvelope(mapper.Map<List<Material>>(materials));
             }
         }
     }
-    
-    
 }

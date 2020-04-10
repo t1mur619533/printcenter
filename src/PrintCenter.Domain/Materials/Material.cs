@@ -1,12 +1,7 @@
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
-
-namespace PrintCenter.Data.Models
+namespace PrintCenter.Domain.Materials
 {
-    public class Material : IHasId
+    public class Material
     {
-        public int Id { get; set; }
-
         public string Name { get; set; }
 
         public double Parameter { get; set; }
@@ -22,11 +17,5 @@ namespace PrintCenter.Data.Models
         public double NormalCount { get; set; }
 
         public double MinimalCount { get; set; }
-
-        [JsonIgnore]
-        public List<MaterialMovement> MaterialMovements { get; set; }
-        
-        [JsonIgnore]
-        public List<MaterialConsumption> MaterialConsumptions { get; set; }
     }
 }
