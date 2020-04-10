@@ -36,7 +36,7 @@ namespace PrintCenter.Data.Models
         [JsonIgnore]
         public List<Invoice> Invoices { get; set; }
 
-        [NotMapped]
+        [NotMapped, JsonIgnore]
         public List<Technology> Technologies => UserTechnologies.Where(technology => technology.UserId.Equals(Id)).Select(technology => technology.Technology).ToList();
     }
 

@@ -4,11 +4,11 @@ namespace PrintCenter.Domain.Users
 {
     public class UsersEnvelope
     {
-        public List<User> User { get; set; }
+        public List<UserEnvelope> Users { get; set; }
 
-        public UsersEnvelope(List<User> user)
+        public UsersEnvelope(List<UserEnvelope> users)
         {
-            User = user;
+            Users = users;
         }
     }
 }
