@@ -41,10 +41,7 @@ namespace PrintCenter.Domain.Customers
                     throw new RestException(HttpStatusCode.NotFound);
                 }
                 
-                return new CustomerEnvelope
-                {
-                    Customer = mapper.Map<Customer>(customer)
-                };
+                return new CustomerEnvelope(mapper.Map<Customer>(customer));
             }
         }
     }
