@@ -32,10 +32,11 @@ namespace PrintCenter.Domain.Users
         {
             public UserDtoValidator()
             {
-                RuleFor(x => x.Login).NotNull().NotEmpty();
-                RuleFor(x => x.Password).NotNull().NotEmpty();
-                RuleFor(x => x.Name).NotNull().NotEmpty();
-                RuleFor(x => x.Surname).NotNull().NotEmpty();
+                RuleFor(x => x.Login).NotNull().NotEmpty().Length(1, 255);
+                RuleFor(x => x.Password).NotNull().NotEmpty().Length(1, 255);
+                RuleFor(x => x.Name).NotNull().NotEmpty().Length(1, 255);
+                RuleFor(x => x.Role).IsInEnum();
+                RuleFor(x => x.Surname).NotNull().NotEmpty().Length(1, 255);
             }
         }
 

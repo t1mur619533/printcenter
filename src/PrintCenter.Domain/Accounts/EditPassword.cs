@@ -35,8 +35,8 @@ namespace PrintCenter.Domain.Accounts
             public CommandValidator()
             {
                 RuleFor(x => x.UserDto).NotNull();
-                RuleFor(x => x.UserDto.OldPassword).NotNull().NotEmpty();
-                RuleFor(x => x.UserDto.NewPassword).NotNull().NotEmpty();
+                RuleFor(x => x.UserDto.OldPassword).NotNull().NotEmpty().Length(6, 255);
+                RuleFor(x => x.UserDto.NewPassword).NotNull().NotEmpty().Length(6, 255);
                 RuleFor(x => x.Login).NotNull().NotEmpty();
             }
         }
