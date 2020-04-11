@@ -7,6 +7,7 @@ namespace PrintCenter.Data.Models
 {
     public class Technology : IHasId
     {
+        [JsonIgnore]
         public int Id { get; set; }
 
         public string Name { get; set; }
@@ -18,7 +19,7 @@ namespace PrintCenter.Data.Models
         [JsonIgnore]
         public List<UserTechnology> UserTechnologies { get; set; }
 
-        [NotMapped]
-        public List<User> Users => UserTechnologies.Where(technology => technology.TechnologyId.Equals(Id)).Select(technology => technology.User).ToList();
+        [NotMapped, JsonIgnore]
+        public List<User> Users => UserTechnologies.Select(technology => technology.User).ToList();
     }
 }

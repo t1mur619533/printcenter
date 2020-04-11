@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -12,6 +13,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using PrintCenter.Data.Models;
+using PrintCenter.Domain.Infrastructure;
 using PrintCenter.Domain.Users;
 using Serilog;
 using Serilog.Events;
@@ -20,7 +23,7 @@ using User = PrintCenter.Data.Models.User;
 
 namespace PrintCenter.Api
 {
-    public static class Extensions
+    public static class StartupExtensions
     {
         public static IServiceCollection AddSwagger(this IServiceCollection services)
         {
@@ -65,8 +68,8 @@ namespace PrintCenter.Api
         public static IServiceCollection AddMediatR(this IServiceCollection services)
         {
             services.AddMediatR(Assembly.GetAssembly(typeof(UsersEnvelope)));
-            //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
-            //services.AddScoped(typeof(IPipelineBehavior<,>), typeof(DBContextTransactionPipelineBehavior<,>));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(TransactionPipelineBehavior<,>));
             return services;
         }
 
@@ -95,18 +98,32 @@ namespace PrintCenter.Api
                         ValidateIssuer = false,
                         ValidateAudience = false
                     };
-                    x.Events = new JwtBearerEvents()
+                    //todo: костыльный обход авторизации, для удобства проверки апи при запуске локально, в дальнейшем нужно найти более гигиеничный сбособ
+#if DEBUG
+                    x.Events = new JwtBearerEvents
                     {
-                        OnMessageReceived = (context) =>
+                        OnMessageReceived = context =>
                         {
-                            var token = context.HttpContext.Request.Headers["Authorization"];
-                            if (token.Count > 0 && token[0].StartsWith("Token ", StringComparison.OrdinalIgnoreCase))
+                            // если запрос локальный
+                            if (context.HttpContext.Request.IsLocal() )
                             {
-                                context.Token = token[0].Substring("Token ".Length).Trim();
+                                //проверяем наличие токена
+                                var token = context.HttpContext.Request.Headers["Authorization"];
+                                //в случае, если токена нет
+                                if (token.Count <= 0)
+                                {
+                                    //подписываем юзера с логином local и ролью SuperAdmin, чтобы был доступ к апи
+                                    context.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new[]
+                                    {
+                                        new Claim(ClaimsIdentity.DefaultNameClaimType, "local"),
+                                        new Claim(ClaimsIdentity.DefaultRoleClaimType, nameof(Role.SuperAdmin))
+                                    }));
+                                }
                             }
                             return Task.CompletedTask;
                         }
                     };
+#endif
                 });
         }
 
