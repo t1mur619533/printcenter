@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace PrintCenter.Data.Models
 {
@@ -21,7 +22,9 @@ namespace PrintCenter.Data.Models
 
     public enum MovementType
     {
+        [Display(Name = "Приход")]
         Coming,
+        [Display(Name = "Расход")]
         Consumption
     }
 }

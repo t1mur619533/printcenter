@@ -9,12 +9,11 @@ namespace PrintCenter.Data.Configurations
         public void Configure(EntityTypeBuilder<User> builder)
         {
             builder
-                .Property(b => b.Login)
-                .IsRequired();
+                .HasAlternateKey(u => u.Login);
 
             builder
-                .HasIndex(u => u.Login)
-                .IsUnique();
+                .Property(u => u.Login)
+                .IsRequired();
 
             builder
                 .Property(b => b.PasswordHash)
