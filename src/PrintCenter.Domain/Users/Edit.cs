@@ -23,12 +23,12 @@ namespace PrintCenter.Domain.Users
 
             public string Name { get; set; }
 
-            public Role Role { get; set; }
+            public Role? Role { get; set; }
 
             public List<string> TechnologiesNames { get; set; }
         }
 
-        public class Command : IRequest<Unit>
+        public class Command : IRequest
         {
             public string Login { get; set; }
 
@@ -42,7 +42,7 @@ namespace PrintCenter.Domain.Users
                 RuleFor(x => x.UserDto).NotNull();
                 RuleFor(x => x.UserDto.Name).NotNull().NotEmpty();
                 RuleFor(x => x.UserDto.Surname).NotNull().NotEmpty();
-                RuleFor(x => x.UserDto.Role).NotNull().NotEmpty();
+                RuleFor(x => x.UserDto.Role).IsInEnum().WithState(command => command.UserDto.Role <= Role.SuperAdmin);
                 RuleFor(x => x.Login).NotNull().NotEmpty();
             }
         }
@@ -67,12 +67,12 @@ namespace PrintCenter.Domain.Users
 
                 if (user == null)
                 {
-                    throw new RestException(HttpStatusCode.BadRequest);
+                    throw new RestException(HttpStatusCode.BadRequest, $"Account with login {command.Login} not found.");
                 }
 
                 user.Name = command.UserDto.Name ?? user.Name;
                 user.Surname = command.UserDto.Surname ?? user.Surname;
-                user.Role = command.UserDto.Role;
+                user.Role = command.UserDto.Role ?? user.Role;
 
                 if (!string.IsNullOrWhiteSpace(command.UserDto.Password))
                 {

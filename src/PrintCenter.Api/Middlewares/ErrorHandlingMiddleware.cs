@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Threading.Tasks;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using PrintCenter.Domain.Exceptions;
@@ -38,9 +39,13 @@ namespace PrintCenter.Api.Middlewares
                     errors = restException.Errors;
                     context.Response.StatusCode = (int) restException.Code;
                     break;
+                case ValidationException validationException:
+                    errors = validationException.Errors;
+                    context.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                    break;
                 case { } e:
                     errors = string.IsNullOrWhiteSpace(e.Message) ? "Error" : e.Message;
-                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
                     break;
             }
 
