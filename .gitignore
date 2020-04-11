@@ -3,7 +3,12 @@
 *.user
 *.userosscache
 *.sln.docstates
-build/
+
+# Nuke build 
+# build/
+*/[Bb]in/
+*/[Oo]bj/
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
