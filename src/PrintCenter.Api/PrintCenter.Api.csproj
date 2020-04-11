@@ -40,4 +40,8 @@
     <ProjectReference Include="..\PrintCenter.Domain\PrintCenter.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Middlewares\" />
+  </ItemGroup>
+
 </Project>

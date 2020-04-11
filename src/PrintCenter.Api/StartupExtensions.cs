@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PrintCenter.Data.Models;
+using PrintCenter.Domain.Infrastructure;
 using PrintCenter.Domain.Users;
 using Serilog;
 using Serilog.Events;
@@ -67,8 +68,8 @@ namespace PrintCenter.Api
         public static IServiceCollection AddMediatR(this IServiceCollection services)
         {
             services.AddMediatR(Assembly.GetAssembly(typeof(UsersEnvelope)));
-            //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
-            //services.AddScoped(typeof(IPipelineBehavior<,>), typeof(DBContextTransactionPipelineBehavior<,>));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(TransactionPipelineBehavior<,>));
             return services;
         }
 
