@@ -32,6 +32,8 @@ namespace PrintCenter.Domain.Customers
             {
                 RuleFor(x => x.CustomerDto).NotNull();
                 RuleFor(x => x.CustomerDto.Name).NotNull().NotEmpty();
+                RuleFor(x => x.CustomerDto.Name).Length(1, 255).WithMessage("Имя должно быть не короче 1 символа и не длиннее 255 символов");
+                RuleFor(x => x.CustomerDto.Description).Length(0, 255).WithMessage("Описание должно быть не длиннее 255 символов");
             }
         }
         

@@ -1,7 +1,11 @@
+using System.Collections.Generic;
+
 namespace PrintCenter.Domain.Materials
 {
     public class Material
     {
+        public int Id { get; set; }
+        
         public string Name { get; set; }
 
         public double Parameter { get; set; }
@@ -17,5 +21,25 @@ namespace PrintCenter.Domain.Materials
         public double NormalCount { get; set; }
 
         public double MinimalCount { get; set; }
+    }
+    
+    public class MaterialEnvelope
+    {
+        public Material Material { get; set; }
+
+        public MaterialEnvelope(Material material)
+        {
+            Material = material;
+        }
+    }
+    
+    public class MaterialsEnvelope
+    {
+        public List<Material> Materials { get; set; }
+
+        public MaterialsEnvelope(List<Material> materials)
+        {
+            Materials = materials;
+        }
     }
 }
