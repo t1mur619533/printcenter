@@ -40,10 +40,10 @@ namespace PrintCenter.Domain.Users
             public CommandValidator()
             {
                 RuleFor(x => x.UserDto).NotNull();
-                RuleFor(x => x.UserDto.Name).NotNull().NotEmpty();
-                RuleFor(x => x.UserDto.Surname).NotNull().NotEmpty();
-                RuleFor(x => x.UserDto.Role).IsInEnum().WithState(command => command.UserDto.Role <= Role.SuperAdmin);
-                RuleFor(x => x.Login).NotNull().NotEmpty();
+                RuleFor(x => x.UserDto.Name).NotNull().NotEmpty().Length(1,255);
+                RuleFor(x => x.UserDto.Surname).NotNull().NotEmpty().Length(1, 255);
+                RuleFor(x => x.UserDto.Role).IsInEnum();
+                RuleFor(x => x.Login).NotNull().NotEmpty().Length(1, 255);
             }
         }
 
