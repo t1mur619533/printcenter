@@ -37,7 +37,7 @@ namespace PrintCenter.Data.Models
         public List<Invoice> Invoices { get; set; }
 
         [NotMapped, JsonIgnore]
-        public List<Technology> Technologies => UserTechnologies.Where(technology => technology.UserId.Equals(Id)).Select(technology => technology.Technology).ToList();
+        public List<Technology> Technologies => UserTechnologies.Select(technology => technology.Technology).ToList();
     }
 
     public enum Role

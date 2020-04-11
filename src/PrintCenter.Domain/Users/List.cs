@@ -37,6 +37,7 @@ namespace PrintCenter.Domain.Users
             {
                 var users = await context.Users
                     .Include(user => user.UserTechnologies)
+                    .ThenInclude(technology => technology.Technology)
                     .Skip(query.Offset ?? 0)
                     .Take(query.Limit ?? 20)
                     .AsNoTracking()

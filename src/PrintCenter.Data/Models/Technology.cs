@@ -20,6 +20,6 @@ namespace PrintCenter.Data.Models
         public List<UserTechnology> UserTechnologies { get; set; }
 
         [NotMapped, JsonIgnore]
-        public List<User> Users => UserTechnologies.Where(technology => technology.TechnologyId.Equals(Id)).Select(technology => technology.User).ToList();
+        public List<User> Users => UserTechnologies.Select(technology => technology.User).ToList();
     }
 }

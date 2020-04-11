@@ -45,6 +45,7 @@ namespace PrintCenter.Domain.Users
             {
                 var user = await context.Users
                     .Include(u => u.UserTechnologies)
+                    .ThenInclude(t => t.Technology)
                     .FirstOrDefaultAsync(x => x.Login.Equals(message.Login), cancellationToken);
 
                 if (user == null)
