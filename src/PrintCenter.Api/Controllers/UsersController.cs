@@ -24,19 +24,13 @@ namespace PrintCenter.Api.Controllers
         }
 
         [HttpPost]
-        public async Task Create([FromBody] Create.Command command)
+        public async Task Post([FromBody] Create.Command command)
         {
             await mediator.Send(command);
         }
 
-        [HttpPost("login")]
-        [AllowAnonymous]
-        public async Task<UserEnvelope> Login([FromBody] Login.Command command)
-        {
-            return await mediator.Send(command);
-        }
 
-        [HttpGet("availableroles")]
+        [HttpGet("Roles")]
         public async Task<List<Tuple<string, Role>>> GetAvailableRoles()
         {
             return await Task.FromResult(Enum.GetNames(typeof(Role)).Select(s =>
