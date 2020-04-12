@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -54,9 +53,7 @@ namespace PrintCenter.Domain.Accounts
 
             public async Task<Unit> Handle(Command command, CancellationToken cancellationToken)
             {
-                var user = await context.Users
-                    .Where(x => x.Login.Equals(command.Login))
-                    .FirstOrDefaultAsync(cancellationToken);
+                var user = await context.Users.FirstOrDefaultAsync(x => x.Login.Equals(command.Login), cancellationToken);
 
                 if (user == null)
                 {
