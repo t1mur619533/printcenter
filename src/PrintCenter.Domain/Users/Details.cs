@@ -41,16 +41,17 @@ namespace PrintCenter.Domain.Users
                 this.mapper = mapper;
             }
 
-            public async Task<UserEnvelope> Handle(Query message, CancellationToken cancellationToken)
+            public async Task<UserEnvelope> Handle(Query query, CancellationToken cancellationToken)
             {
                 var user = await context.Users
                     .Include(u => u.UserTechnologies)
                     .ThenInclude(t => t.Technology)
-                    .FirstOrDefaultAsync(x => x.Login.Equals(message.Login), cancellationToken);
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(x => x.Login.Equals(query.Login), cancellationToken);
 
                 if (user == null)
                 {
-                    throw new RestException(HttpStatusCode.NotFound);
+                    throw new RestException(HttpStatusCode.NotFound, $"User with login {query.Login} not found.");
                 }
 
                 return new UserEnvelope(mapper.Map<User>(user), user.Technologies);

@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -55,11 +54,11 @@ namespace PrintCenter.Domain.Users
 
         public class Handler : IRequestHandler<Command>
         {
-            private readonly IDataContext context;
+            private readonly DataContext context;
             private readonly IPasswordHasher<Data.Models.User> hasher;
             private readonly IMapper mapper;
 
-            public Handler(IDataContext context, IMapper mapper, IPasswordHasher<Data.Models.User> hasher)
+            public Handler(DataContext context, IMapper mapper, IPasswordHasher<Data.Models.User> hasher)
             {
                 this.context = context;
                 this.mapper = mapper;
@@ -68,16 +67,16 @@ namespace PrintCenter.Domain.Users
 
             public async Task<Unit> Handle(Command command, CancellationToken cancellationToken)
             {
-                if (await context.DbSet<Data.Models.User>().Where(x => x.Login == command.UserDto.Login)
-                    .AnyAsync(cancellationToken))
+                if (await context.Users.AnyAsync(x => x.Login == command.UserDto.Login, cancellationToken))
                 {
-                    throw new RestException(HttpStatusCode.BadRequest,$"User with login {command.UserDto.Login} already exits.");
+                    throw new RestException(HttpStatusCode.BadRequest,
+                        $"User with login {command.UserDto.Login} already exits.");
                 }
 
                 var user = mapper.Map<Data.Models.User>(command.UserDto);
                 user.PasswordHash = hasher.HashPassword(user, command.UserDto.Password);
 
-                await context.DbSet<Data.Models.User>().AddAsync(user, cancellationToken);
+                await context.Users.AddAsync(user, cancellationToken);
 
                 await context.SaveChangesAsync(cancellationToken);
 

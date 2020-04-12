@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -46,12 +45,12 @@ namespace PrintCenter.Domain.Accounts
 
         public class Handler : IRequestHandler<Command, AccountEnvelope>
         {
-            private readonly IDataContext context;
+            private readonly DataContext context;
             private readonly IMapper mapper;
             private readonly IPasswordHasher<Data.Models.User> passwordHasher;
             private readonly IJwtTokenGenerator jwtTokenGenerator;
 
-            public Handler(IDataContext context, IPasswordHasher<Data.Models.User> passwordHasher, IMapper mapper,
+            public Handler(DataContext context, IPasswordHasher<Data.Models.User> passwordHasher, IMapper mapper,
                 IJwtTokenGenerator jwtTokenGenerator)
             {
                 this.context = context;
@@ -62,8 +61,7 @@ namespace PrintCenter.Domain.Accounts
 
             public async Task<AccountEnvelope> Handle(Command message, CancellationToken cancellationToken)
             {
-                var user = await context.DbSet<Data.Models.User>().Where(x => x.Login == message.AccountDto.Login)
-                    .SingleOrDefaultAsync(cancellationToken);
+                var user = await context.Users.AsNoTracking().SingleOrDefaultAsync(x => x.Login == message.AccountDto.Login, cancellationToken);
                 if (user == null)
                 {
                     throw new RestException(HttpStatusCode.Unauthorized, "Invalid login / password.");
