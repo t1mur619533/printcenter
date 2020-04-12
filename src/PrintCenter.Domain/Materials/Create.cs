@@ -70,16 +70,14 @@ namespace PrintCenter.Domain.Materials
 
             public async Task<Unit> Handle(Command command, CancellationToken cancellationToken)
             {
-                if (await context.DbSet<Data.Models.Material>().Where(x => x.Name == command.MaterialDto.Name &&
-                                                                           Math.Abs(x.Parameter - command.MaterialDto.Parameter) < 0.001)
-                    .AnyAsync(cancellationToken))
+                if (await context.Materials.Where(x => x.Name == command.MaterialDto.Name && Math.Abs(x.Parameter - command.MaterialDto.Parameter) < 0.001).AnyAsync(cancellationToken))
                 {
                     throw new RestException(HttpStatusCode.BadRequest, $"Material with full name {command.MaterialDto.Name} already exits.");
                 }
 
                 var material = mapper.Map<Data.Models.Material>(command.MaterialDto);
 
-                await context.DbSet<Data.Models.Material>().AddAsync(material, cancellationToken);
+                await context.Materials.AddAsync(material, cancellationToken);
 
                 await context.SaveChangesAsync(cancellationToken);
 

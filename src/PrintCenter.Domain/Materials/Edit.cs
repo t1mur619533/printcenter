@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -66,9 +62,7 @@ namespace PrintCenter.Domain.Materials
 
             public async Task<Unit> Handle(Command command, CancellationToken cancellationToken)
             {
-                var material = await context.Materials
-                    .Where(x => x.Id == command.Id)
-                    .FirstOrDefaultAsync(cancellationToken);
+                var material = await context.Materials.FirstOrDefaultAsync(x => x.Id == command.Id, cancellationToken);
 
                 if (material == null)
                 {
