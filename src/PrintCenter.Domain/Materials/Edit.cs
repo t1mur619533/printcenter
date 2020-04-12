@@ -1,4 +1,3 @@
-﻿using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,20 +8,32 @@ using Microsoft.EntityFrameworkCore;
 using PrintCenter.Data;
 using PrintCenter.Domain.Exceptions;
 
-namespace PrintCenter.Domain.Customers
+namespace PrintCenter.Domain.Materials
 {
     public class Edit
     {
-        public class CustomerDto
+        public class MaterialDto
         {
             public string Name { get; set; }
 
+            public double Parameter { get; set; }
+
+            public string Unit { get; set; }
+
+            public decimal Price { get; set; }
+
             public string Description { get; set; }
+
+            public double Count { get; set; }
+
+            public double NormalCount { get; set; }
+
+            public double MinimalCount { get; set; }
         }
 
         public class Command : IRequest<Unit>
         {
-            public CustomerDto CustomerDto { get; set; }
+            public MaterialDto MaterialDto { get; set; }
             public int Id { get; set; }
         }
         
@@ -30,10 +41,11 @@ namespace PrintCenter.Domain.Customers
         {
             public CommandValidator()
             {
-                RuleFor(x => x.CustomerDto).NotNull();
-                RuleFor(x => x.CustomerDto.Name).NotNull().NotEmpty();
-                RuleFor(x => x.CustomerDto.Name).Length(1, 255).WithMessage("Имя должно быть не короче 1 символа и не длиннее 255 символов");
-                RuleFor(x => x.CustomerDto.Description).Length(0, 255).WithMessage("Описание должно быть не длиннее 255 символов");
+                RuleFor(material => material.MaterialDto).NotNull();
+                RuleFor(material => material.MaterialDto.Name).NotNull().NotEmpty();
+                RuleFor(material => material.MaterialDto.Parameter).NotEqual(0.0);
+                RuleFor(material => material.MaterialDto.Unit).NotNull().NotEmpty();
+                RuleFor(material => material.MaterialDto.Price).NotEqual(0.0m);
             }
         }
         
@@ -50,16 +62,14 @@ namespace PrintCenter.Domain.Customers
 
             public async Task<Unit> Handle(Command command, CancellationToken cancellationToken)
             {
-                var customer = await context.Customers
-                    .Where(x => x.Id == command.Id)
-                    .FirstOrDefaultAsync(cancellationToken);
+                var material = await context.Materials.FirstOrDefaultAsync(x => x.Id == command.Id, cancellationToken);
 
-                if (customer == null)
+                if (material == null)
                 {
                     throw new RestException(HttpStatusCode.NotFound);
                 }
                 
-                mapper.Map(command.CustomerDto, customer);
+                mapper.Map(command.MaterialDto, material);
 
                 await context.SaveChangesAsync(cancellationToken);
 

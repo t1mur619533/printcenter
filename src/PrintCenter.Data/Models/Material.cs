@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace PrintCenter.Data.Models
 {
@@ -22,8 +23,10 @@ namespace PrintCenter.Data.Models
 
         public double MinimalCount { get; set; }
 
+        [JsonIgnore]
         public List<MaterialMovement> MaterialMovements { get; set; }
-
+        
+        [JsonIgnore]
         public List<MaterialConsumption> MaterialConsumptions { get; set; }
     }
 }

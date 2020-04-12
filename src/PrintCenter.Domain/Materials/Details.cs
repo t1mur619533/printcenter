@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore;
 using PrintCenter.Data;
 using PrintCenter.Domain.Exceptions;
 
-namespace PrintCenter.Domain.Customers
+namespace PrintCenter.Domain.Materials
 {
     public class Details
     {
-        public class Query : IRequest<CustomerEnvelope>
+        public class Query : IRequest<MaterialEnvelope>
         {
             public int Id { get; set; }
             
@@ -21,7 +21,7 @@ namespace PrintCenter.Domain.Customers
             }
         }
         
-        public class QueryHandler : IRequestHandler<Query, CustomerEnvelope>
+        public class QueryHandler : IRequestHandler<Query, MaterialEnvelope>
         {
             private readonly DataContext context;
             private readonly IMapper mapper;
@@ -32,16 +32,16 @@ namespace PrintCenter.Domain.Customers
                 this.mapper = mapper;
             }
 
-            public async Task<CustomerEnvelope> Handle(Query message, CancellationToken cancellationToken)
+            public async Task<MaterialEnvelope> Handle(Query message, CancellationToken cancellationToken)
             {
-                var customer = await context.Customers.FirstOrDefaultAsync(x => x.Id == message.Id, cancellationToken);
+                var material = await context.Materials.FirstOrDefaultAsync(x => x.Id == message.Id, cancellationToken);
 
-                if (customer == null)
+                if (material == null)
                 {
                     throw new RestException(HttpStatusCode.NotFound);
                 }
                 
-                return new CustomerEnvelope(mapper.Map<Customer>(customer));
+                return new MaterialEnvelope(mapper.Map<Material>(material));
             }
         }
     }
