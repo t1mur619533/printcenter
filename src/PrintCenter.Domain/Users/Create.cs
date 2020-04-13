@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation;
 using MediatR;
+using MediatR.Pipeline;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PrintCenter.Data;
@@ -39,7 +40,7 @@ namespace PrintCenter.Domain.Users
             }
         }
 
-        public class Command : IRequest
+        public class Command : IRequest<int>
         {
             public UserDto UserDto { get; set; }
         }
@@ -52,7 +53,7 @@ namespace PrintCenter.Domain.Users
             }
         }
 
-        public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command, int>
         {
             private readonly DataContext context;
             private readonly IPasswordHasher<Data.Models.User> hasher;
@@ -65,7 +66,7 @@ namespace PrintCenter.Domain.Users
                 this.hasher = hasher;
             }
 
-            public async Task<Unit> Handle(Command command, CancellationToken cancellationToken)
+            public async Task<int> Handle(Command command, CancellationToken cancellationToken)
             {
                 if (await context.Users.AnyAsync(x => x.Login == command.UserDto.Login, cancellationToken))
                 {
@@ -76,11 +77,33 @@ namespace PrintCenter.Domain.Users
                 var user = mapper.Map<Data.Models.User>(command.UserDto);
                 user.PasswordHash = hasher.HashPassword(user, command.UserDto.Password);
 
-                await context.Users.AddAsync(user, cancellationToken);
+                var createdUserId = await context.Users.AddAsync(user, cancellationToken);
 
                 await context.SaveChangesAsync(cancellationToken);
 
-                return Unit.Value;
+                return createdUserId.Entity.Id;
+            }
+        }
+
+        public class PostHandler : IRequestPostProcessor<Command, int>
+        {
+            private readonly DataContext context;
+
+            public PostHandler(DataContext context)
+            {
+                this.context = context;
+            }
+
+            public async Task Process(Command request, int response, CancellationToken cancellationToken)
+            {
+                await context.Notifications.AddAsync(
+                    new Notification
+                    {
+                        UserId = response,
+                        Content = $"Поздравляем, {request.UserDto.Name} {request.UserDto.Surname}! " +
+                                  $"Вы – новый пользователь системы «Центр печати»! Перед началом работы пройдите инструктаж."
+                    }, cancellationToken);
+                await context.SaveChangesAsync(cancellationToken);
             }
         }
     }
