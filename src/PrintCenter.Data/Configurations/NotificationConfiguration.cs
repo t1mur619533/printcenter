@@ -8,13 +8,15 @@ namespace PrintCenter.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Notification> builder)
         {
-            //builder
-            //    .Property(b => b.Content)
-            //    .IsRequired();
+            builder.HasKey(_ => _.Id);
+            
+            builder
+                .Property(_ => _.Content)
+                .IsRequired();
 
-            //builder
-            //    .Property(b => b.Date)
-            //    .IsRequired();
+            builder
+                .Property(_ => _.CreatedDate)
+                .IsRequired();
         }
     }
 }

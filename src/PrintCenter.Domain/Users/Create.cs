@@ -1,4 +1,3 @@
-using System;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -100,9 +99,9 @@ namespace PrintCenter.Domain.Users
                 await context.Notifications.AddAsync(
                     new Notification
                     {
-                        UserId = response, Date = DateTime.Now,
-                        Content =
-                            $"Поздравляем, {request.UserDto.Name} {request.UserDto.Surname}! Вы – новый пользователь системы «Центр печати»! Перед началом работы пройдите инструктаж."
+                        UserId = response,
+                        Content = $"Поздравляем, {request.UserDto.Name} {request.UserDto.Surname}! " +
+                                  $"Вы – новый пользователь системы «Центр печати»! Перед началом работы пройдите инструктаж."
                     }, cancellationToken);
                 await context.SaveChangesAsync(cancellationToken);
             }
