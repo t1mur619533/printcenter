@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using PrintCenter.Domain.Exceptions;
 
@@ -11,10 +12,12 @@ namespace PrintCenter.Api.Middlewares
     public class ErrorHandlingMiddleware
     {
         private readonly RequestDelegate next;
+        private readonly ILogger<ErrorHandlingMiddleware> logger;
 
-        public ErrorHandlingMiddleware(RequestDelegate next)
+        public ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandlingMiddleware> logger)
         {
             this.next = next;
+            this.logger = logger;
         }
 
         public async Task Invoke(HttpContext context)
@@ -29,7 +32,7 @@ namespace PrintCenter.Api.Middlewares
             }
         }
 
-        private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             object errors = null;
 
@@ -44,7 +47,8 @@ namespace PrintCenter.Api.Middlewares
                     context.Response.StatusCode = (int) HttpStatusCode.BadRequest;
                     break;
                 case { } e:
-                    errors = string.IsNullOrWhiteSpace(e.Message) ? "Error" : e.Message;
+                    logger.LogError(string.IsNullOrWhiteSpace(e.Message) ? e.ToString() : e.Message);
+                    errors = "Произошла непредвиденная ошибка, пожалуйста, свяжитесь с администратором.";
                     context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
                     break;
             }

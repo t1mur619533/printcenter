@@ -17,11 +17,13 @@ namespace PrintCenter.Api
 {
     public class Startup
     {
+        private readonly IWebHostEnvironment environment;
         public IConfiguration Configuration { get; }
 
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Configuration = configuration;
+            this.environment = environment;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -49,12 +51,12 @@ namespace PrintCenter.Api
                 .AddJsonOptions(opt => { opt.JsonSerializerOptions.IgnoreNullValues = true; })
                 .AddFluentValidation(cfg => { cfg.RegisterValidatorsFromAssemblyContaining<Domain.Users.User>(); });
             services.AddSwagger();
-            services.AddJwtAuthentication(Configuration);
+            services.AddJwtAuthentication(Configuration, environment);
             services.AddAuthorization();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddSerilogLogging();
 
@@ -66,7 +68,7 @@ namespace PrintCenter.Api
             //EnsureCreated() обходит миграции, чтобы создать схему. Использовать с InMemoryDatabase 
             //scope.ServiceProvider.GetRequiredService<DataContext>().Database.EnsureCreated();
 
-            if (env.IsDevelopment())
+            if (environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
