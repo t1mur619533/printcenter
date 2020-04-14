@@ -3,11 +3,11 @@ using Microsoft.Extensions.Hosting;
 
 namespace PrintCenter.Api
 {
-    public static class Program
+    public class Program
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            CreateHostBuilder(args).Build().Seed().Run();
         }
 
         private static IHostBuilder CreateHostBuilder(string[] args) =>

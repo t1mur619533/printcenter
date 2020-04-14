@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,11 +8,15 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using PrintCenter.Data;
 using PrintCenter.Data.Models;
 using PrintCenter.Domain.Infrastructure;
 using PrintCenter.Domain.Users;
@@ -159,6 +164,40 @@ namespace PrintCenter.Api
             Log.Logger = log;
 
             TaskScheduler.UnobservedTaskException += (s, e) => log.Error(e.Exception, "Unhandled error");
+        }
+
+        public static IHost Seed(this IHost host)
+        {
+            using var scope = host.Services.CreateScope();
+            var serviceProvider = scope.ServiceProvider;
+            try
+            {
+                //todo: В будущем требуется более надежная стратегия развертывания, такая как создание скриптов SQL
+                var dbContext = serviceProvider.GetRequiredService<DataContext>();
+                dbContext.Database.Migrate();
+                var user = dbContext.Users.FirstOrDefault(_ => _.Role == Role.SuperAdmin);
+                if (user == null)
+                {
+                    user = new User
+                    {
+                        Login = "admin",
+                        Name = "admin",
+                        Surname = "admin",
+                        Role = Role.SuperAdmin
+                    };
+                    user.PasswordHash = serviceProvider.GetRequiredService<IPasswordHasher<User>>()
+                        .HashPassword(user, "admin");
+                    dbContext.Users.Add(user);
+                    dbContext.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
+                logger.LogError(ex, "An error occurred seeding the DB.");
+            }
+
+            return host;
         }
     }
 }
