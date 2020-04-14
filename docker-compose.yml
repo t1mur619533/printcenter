@@ -1,0 +1,51 @@
+version: '3.4'
+
+networks:
+  printcenter-dev:
+    driver: bridge 
+
+services:
+  printcenter.api:
+    container_name: printcenter_container
+    image: ${DOCKER_REGISTRY-}printcenterapi
+    depends_on:
+      - "postgres"
+    build:
+      context: .
+      dockerfile: src/PrintCenter.Api/Dockerfile
+    networks:
+      - printcenter-dev
+      
+  postgres:
+    container_name: postgres_container
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-printcenter}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-printcenter}
+      POSTGRES_DB: ${POSTGRES_DB:-printcenter}
+      PGDATA: /data/postgres
+    volumes:
+       - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - printcenter-dev
+    restart: unless-stopped
+  
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-printcenter@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-printcenter}
+    volumes:
+       - pgadmin:/root/.pgadmin
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    networks:
+      - printcenter-dev
+    restart: unless-stopped
+
+volumes:
+    postgres:
+    pgadmin:
