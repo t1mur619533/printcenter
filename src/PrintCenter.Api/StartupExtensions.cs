@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -85,7 +86,7 @@ namespace PrintCenter.Api
             return services;
         }
 
-        public static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
+        public static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
         {
             services.AddAuthentication(x =>
                 {
@@ -105,31 +106,31 @@ namespace PrintCenter.Api
                         ValidateAudience = false
                     };
 
-                    //todo: костыльный обход авторизации, для удобства проверки апи при запуске локально, в дальнейшем нужно найти более гигиеничный сбособ
-#if DEBUG
-                    x.Events = new JwtBearerEvents
+                    if (environment.IsDevelopment())
                     {
-                        OnMessageReceived = context =>
+                        x.Events = new JwtBearerEvents
                         {
-                            // если запрос локальный
-                            if (context.HttpContext.Request.IsLocal())
+                            OnMessageReceived = context =>
                             {
-                                //проверяем наличие токена
-                                var token = context.HttpContext.Request.Headers["Authorization"];
-                                //в случае, если токена нет
-                                if (token.Count <= 0)
+                                // если запрос локальный
+                                if (context.HttpContext.Request.IsLocal())
                                 {
-                                    //создаем токен для пользователя с логином Local и правами SuperAdmin
-                                    context.Token =
-                                        new JwtTokenGenerator(configuration).CreateToken("Local",
-                                            nameof(Role.SuperAdmin));
+                                    //проверяем наличие токена
+                                    var token = context.HttpContext.Request.Headers["Authorization"];
+                                    //в случае, если токена нет
+                                    if (token.Count <= 0)
+                                    {
+                                        //создаем токен для пользователя с логином Local и правами SuperAdmin
+                                        context.Token =
+                                            new JwtTokenGenerator(configuration).CreateToken("Local",
+                                                nameof(Role.SuperAdmin));
+                                    }
                                 }
-                            }
 
-                            return Task.CompletedTask;
-                        }
-                    };
-#endif
+                                return Task.CompletedTask;
+                            }
+                        };
+                    }
                 });
         }
 
