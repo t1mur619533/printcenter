@@ -60,11 +60,6 @@ namespace PrintCenter.Api
         {
             loggerFactory.AddSerilogLogging();
 
-            using var scope = app.ApplicationServices.CreateScope();
-
-            //todo: В будущем требуется более надежная стратегия развертывания, такая как создание скриптов SQL
-            scope.ServiceProvider.GetRequiredService<DataContext>().Database.Migrate();
-
             //EnsureCreated() обходит миграции, чтобы создать схему. Использовать с InMemoryDatabase 
             //scope.ServiceProvider.GetRequiredService<DataContext>().Database.EnsureCreated();
 
