@@ -8,6 +8,10 @@
   <PropertyGroup>
   <GenerateDocumentationFile>true</GenerateDocumentationFile>
   <NoWarn>$(NoWarn);1591</NoWarn>
+  <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
+  <UserSecretsId>df9f170f-4164-4e78-a190-99d1d9cb4b35</UserSecretsId>
+  <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  <DockerfileContext>..\..</DockerfileContext>
 </PropertyGroup>
 
   <ItemGroup>
@@ -25,6 +29,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.3" />
     <PackageReference Include="Serilog" Version="2.9.0" />
