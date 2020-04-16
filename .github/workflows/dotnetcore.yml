@@ -1,4 +1,4 @@
-name: PrintCenter
+name: Build
 
 on:
   push:
