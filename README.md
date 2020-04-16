@@ -1,6 +1,4 @@
-# Print Center
-![build](https://github.com/t1mur619533/printcenter/workflows/PrintCenter/badge.svg)
-
+# Print Center ![Build](https://github.com/t1mur619533/printcenter/workflows/Build/badge.svg)
 >Web application for placing orders in the print department
 
 ## Technologies
