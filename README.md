@@ -1,7 +1,9 @@
-# "Принт центр"
->Веб приложение для оформления заказов в отделе печати
+# Print Center
+![build](https://github.com/t1mur619533/printcenter/workflows/PrintCenter/badge.svg)
 
-## Технологии
+>Web application for placing orders in the print department
+
+## Technologies
 
   * ASP.NET Core 3.1 (with .NET Core 3.1) 
   * ASP.NET WebApi Core with JWT Bearer Authentication
@@ -13,7 +15,7 @@
   * MediatR (CQRS with MediatR and AutoMapper)
   * Swagger UI with JWT support
 
-## Сборка и контейнеризация 
+## Building, Docker
   * Nuke - `dotnet run -p build/_build.csproj`
   * Docker Build and Run - `docker-compose up --build`
   
