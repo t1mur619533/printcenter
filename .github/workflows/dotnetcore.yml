@@ -1,4 +1,4 @@
-name: .net core
+name: printcenter .net core
 
 on:
   push:
