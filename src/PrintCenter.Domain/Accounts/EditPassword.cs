@@ -26,16 +26,16 @@ namespace PrintCenter.Domain.Accounts
             [JsonIgnore]
             public string Login { get; set; }
 
-            public AccountDto UserDto { get; set; }
+            public AccountDto AccountDto { get; set; }
         }
 
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
-                RuleFor(x => x.UserDto).NotNull();
-                RuleFor(x => x.UserDto.OldPassword).NotNull().NotEmpty().Length(6, 255);
-                RuleFor(x => x.UserDto.NewPassword).NotNull().NotEmpty().Length(6, 255);
+                RuleFor(x => x.AccountDto).NotNull();
+                RuleFor(x => x.AccountDto.OldPassword).NotNull().NotEmpty().Length(6, 255);
+                RuleFor(x => x.AccountDto.NewPassword).NotNull().NotEmpty().Length(6, 255);
                 RuleFor(x => x.Login).NotNull().NotEmpty();
             }
         }
@@ -60,13 +60,13 @@ namespace PrintCenter.Domain.Accounts
                     throw new RestException(HttpStatusCode.BadRequest);
                 }
 
-                if (passwordHasher.VerifyHashedPassword(user, user.PasswordHash, command.UserDto.OldPassword)
+                if (passwordHasher.VerifyHashedPassword(user, user.PasswordHash, command.AccountDto.OldPassword)
                     .Equals(PasswordVerificationResult.Failed))
                 {
                     throw new RestException(HttpStatusCode.Unauthorized, "Invalid login / password.");
                 }
 
-                user.PasswordHash = passwordHasher.HashPassword(user, command.UserDto.NewPassword);
+                user.PasswordHash = passwordHasher.HashPassword(user, command.AccountDto.NewPassword);
 
                 await context.SaveChangesAsync(cancellationToken);
 

@@ -17,6 +17,7 @@ x86/
 bld/
 /src/*/[Bb]in/
 /src/*/[Oo]bj/
+/tests/*/[Oo]bj/
 [Ll]og/
 /builds/
 /tools/
