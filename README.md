@@ -1,4 +1,4 @@
-# Print Center ![Build](https://github.com/t1mur619533/printcenter/workflows/Build/badge.svg)
+# Print Center
 >Web application for placing orders in the print department
 
 ## Technologies
@@ -12,6 +12,7 @@
   * FluentValidator
   * MediatR (CQRS with MediatR and AutoMapper)
   * Swagger UI with JWT support
+  * Testing with xUnit, NSubstitute
 
 ## Building, Docker
   * Nuke - `dotnet run -p build/_build.csproj`
@@ -19,3 +20,7 @@
   
 ## Swagger URL
   * `http://localhost:5000/swagger`
+  
+## GitHub Actions build
+
+![build-and-test](https://github.com/t1mur619533/printcenter/workflows/build-and-test/badge.svg)
