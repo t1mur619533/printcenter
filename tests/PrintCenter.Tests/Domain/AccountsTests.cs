@@ -13,13 +13,13 @@ using Xunit;
 
 namespace PrintCenter.Tests.Domain
 {
-    public class AccountsTests : IClassFixture<DependencySetupFixture>
+    public class AccountsTests : IClassFixture<AuthDependenciesFixture>
     {
         private readonly IServiceProvider serviceProvider;
 
-        public AccountsTests(DependencySetupFixture dependencySetupFixture)
+        public AccountsTests(AuthDependenciesFixture authDependenciesFixture)
         {
-            serviceProvider = dependencySetupFixture.ServiceProvider;
+            serviceProvider = authDependenciesFixture.ServiceProvider;
         }
 
         [Theory]

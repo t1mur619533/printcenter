@@ -5,18 +5,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
-using PrintCenter.Api;
+using PrintCenter.Auth;
+using PrintCenter.Auth.Accounts;
 using PrintCenter.Data;
-using PrintCenter.Domain.Users;
 using PrintCenter.Infrastructure.Security;
 
 namespace PrintCenter.Tests.Helpers
 {
-    public class DependencySetupFixture
+    public class AuthDependenciesFixture
     {
         public IServiceProvider ServiceProvider { get; }
 
-        public DependencySetupFixture()
+        public AuthDependenciesFixture()
         {
             var services = new ServiceCollection();
             //fake db
@@ -37,7 +37,7 @@ namespace PrintCenter.Tests.Helpers
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddMediatR();
             services.AddAutoMapper();
-            services.AddValidatorsFromAssemblyContaining(typeof(User));
+            services.AddValidatorsFromAssemblyContaining(typeof(AccountEnvelope));
             ServiceProvider = services.BuildServiceProvider();
         }
     }
