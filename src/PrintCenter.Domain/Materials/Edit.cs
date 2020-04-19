@@ -1,4 +1,3 @@
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -66,7 +65,7 @@ namespace PrintCenter.Domain.Materials
 
                 if (material == null)
                 {
-                    throw new RestException(HttpStatusCode.NotFound);
+                    throw new NotFoundException<Material>($"id {command.Id}");
                 }
                 
                 mapper.Map(command.MaterialDto, material);

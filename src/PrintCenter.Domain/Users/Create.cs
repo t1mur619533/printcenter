@@ -1,4 +1,3 @@
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -70,8 +69,7 @@ namespace PrintCenter.Domain.Users
             {
                 if (await context.Users.AnyAsync(x => x.Login == command.UserDto.Login, cancellationToken))
                 {
-                    throw new RestException(HttpStatusCode.BadRequest,
-                        $"User with login {command.UserDto.Login} already exits.");
+                    throw new DuplicateException<User>(command.UserDto.Login);
                 }
 
                 var user = mapper.Map<Data.Models.User>(command.UserDto);

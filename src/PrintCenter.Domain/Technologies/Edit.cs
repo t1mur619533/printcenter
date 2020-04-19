@@ -1,4 +1,3 @@
-﻿using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -61,7 +60,7 @@ namespace PrintCenter.Domain.Technologies
 
                 if (technology == null)
                 {
-                    throw new RestException(HttpStatusCode.NotFound);
+                    throw new NotFoundException<Technology>($"id {command.Id}");
                 }
                 
                 mapper.Map(command.TechnologyDto, technology);

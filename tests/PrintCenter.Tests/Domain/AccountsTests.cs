@@ -98,7 +98,7 @@ namespace PrintCenter.Tests.Domain
         [InlineData("name", "passOld", "passNew")]
         [InlineData("name", "123456", "123456")]
         [InlineData("name", "2$*&<#@$", "@#$%%45g")]
-        public async Task Edit_Password_Null_User_Expect_RestException(string name, string passOld, string passNew)
+        public async Task Edit_Password_Null_User_Expect_AccessDeniedException(string name, string passOld, string passNew)
         {
             using (var scope = serviceProvider.CreateScope())
             {
@@ -116,7 +116,7 @@ namespace PrintCenter.Tests.Domain
                 var result = await Assert.ThrowsAnyAsync<Exception>(async () => { await mediator.Send(command); });
 
                 // Asserts
-                Assert.IsAssignableFrom<RestException>(result);
+                Assert.IsAssignableFrom<AccessDeniedException>(result);
             }
         }
 
@@ -124,7 +124,7 @@ namespace PrintCenter.Tests.Domain
         [InlineData("name", "passOld", "passNew")]
         [InlineData("name", "123456", "123456")]
         [InlineData("name", "2$*&<#@$", "@#$%%45g")]
-        public async Task Edit_Password_Invalid_loginPassword_Expect_RestException(string name, string passOld, string passNew)
+        public async Task Edit_Password_Invalid_loginPassword_Expect_AccessDeniedException(string name, string passOld, string passNew)
         {
             using (var scope = serviceProvider.CreateScope())
             {
@@ -150,7 +150,7 @@ namespace PrintCenter.Tests.Domain
                 var result = await Assert.ThrowsAnyAsync<Exception>(async () => { await mediator.Send(command); });
 
                 // Asserts
-                Assert.IsAssignableFrom<RestException>(result);
+                Assert.IsAssignableFrom<AccessDeniedException>(result);
             }
         }
     }

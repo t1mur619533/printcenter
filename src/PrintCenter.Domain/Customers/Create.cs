@@ -1,5 +1,4 @@
 using System.Linq;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -57,7 +56,7 @@ namespace PrintCenter.Domain.Customers
                 if (await context.DbSet<Data.Models.Customer>().Where(x => x.Name == command.CustomerDto.Name)
                     .AnyAsync(cancellationToken))
                 {
-                    throw new RestException(HttpStatusCode.BadRequest,$"Customer with name {command.CustomerDto.Name} already exits.");
+                    throw new DuplicateException<Customer>(command.CustomerDto.Name);
                 }
 
                 var customer = mapper.Map<Data.Models.Customer>(command.CustomerDto);

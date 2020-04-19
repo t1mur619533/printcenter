@@ -1,4 +1,3 @@
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -64,13 +63,13 @@ namespace PrintCenter.Domain.Accounts
                 var user = await context.Users.AsNoTracking().SingleOrDefaultAsync(x => x.Login == message.AccountDto.Login, cancellationToken);
                 if (user == null)
                 {
-                    throw new RestException(HttpStatusCode.Unauthorized, "Invalid login / password.");
+                    throw new AccessDeniedException("Invalid login / password.");
                 }
 
                 if (passwordHasher.VerifyHashedPassword(user, user.PasswordHash, message.AccountDto.Password) ==
                     PasswordVerificationResult.Failed)
                 {
-                    throw new RestException(HttpStatusCode.Unauthorized, "Invalid login / password.");
+                    throw new AccessDeniedException("Invalid login / password.");
                 }
 
                 var account = mapper.Map<Account>(user);

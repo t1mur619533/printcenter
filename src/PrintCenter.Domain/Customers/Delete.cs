@@ -1,4 +1,3 @@
-﻿using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -35,7 +34,7 @@ namespace PrintCenter.Domain.Customers
 
                 if (customer == null)
                 {
-                    throw new RestException(HttpStatusCode.NotFound);
+                    throw new NotFoundException<Customer>($"id {command.Id}");
                 }
 
                 context.Customers.Remove(customer);

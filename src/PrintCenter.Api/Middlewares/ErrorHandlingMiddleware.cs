@@ -38,9 +38,21 @@ namespace PrintCenter.Api.Middlewares
 
             switch (exception)
             {
-                case RestException restException:
-                    errors = restException.Errors;
-                    context.Response.StatusCode = (int) restException.Code;
+                case NotFoundException notFoundException:
+                    errors = notFoundException.Message;
+                    context.Response.StatusCode = (int) HttpStatusCode.NotFound;
+                    break;
+                case DuplicateException duplicateException:
+                    errors = duplicateException.Message;
+                    context.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                    break;
+                case InvalidArgumentException invalidArgumentException:
+                    errors = invalidArgumentException.Message;
+                    context.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                    break;
+                case AccessDeniedException accessDeniedException:
+                    errors = accessDeniedException.Message;
+                    context.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
                     break;
                 case ValidationException validationException:
                     errors = validationException.Errors;
@@ -48,7 +60,8 @@ namespace PrintCenter.Api.Middlewares
                     break;
                 case { } e:
                     logger.LogError(string.IsNullOrWhiteSpace(e.Message) ? e.ToString() : e.Message);
-                    errors = "Произошла непредвиденная ошибка, пожалуйста, свяжитесь с администратором.";
+                    errors =
+                        "The server encountered an internal error or misconfiguration and was unable to complete your request. Please contact the server administrator.";
                     context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
                     break;
             }

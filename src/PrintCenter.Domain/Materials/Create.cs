@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -72,7 +71,7 @@ namespace PrintCenter.Domain.Materials
             {
                 if (await context.Materials.Where(x => x.Name == command.MaterialDto.Name && Math.Abs(x.Parameter - command.MaterialDto.Parameter) < 0.001).AnyAsync(cancellationToken))
                 {
-                    throw new RestException(HttpStatusCode.BadRequest, $"Material with full name {command.MaterialDto.Name} already exits.");
+                    throw new DuplicateException<Material>(command.MaterialDto.Name);
                 }
 
                 var material = mapper.Map<Data.Models.Material>(command.MaterialDto);

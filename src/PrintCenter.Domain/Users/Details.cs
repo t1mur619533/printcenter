@@ -1,4 +1,3 @@
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -51,7 +50,7 @@ namespace PrintCenter.Domain.Users
 
                 if (user == null)
                 {
-                    throw new RestException(HttpStatusCode.NotFound, $"User with login {query.Login} not found.");
+                    throw new NotFoundException<User>(query.Login);
                 }
 
                 return new UserEnvelope(mapper.Map<User>(user), user.Technologies);

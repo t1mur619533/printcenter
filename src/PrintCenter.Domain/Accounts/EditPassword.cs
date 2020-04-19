@@ -1,4 +1,3 @@
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
@@ -57,13 +56,13 @@ namespace PrintCenter.Domain.Accounts
 
                 if (user == null)
                 {
-                    throw new RestException(HttpStatusCode.BadRequest);
+                    throw new AccessDeniedException("Invalid login / password.");
                 }
 
                 if (passwordHasher.VerifyHashedPassword(user, user.PasswordHash, command.AccountDto.OldPassword)
                     .Equals(PasswordVerificationResult.Failed))
                 {
-                    throw new RestException(HttpStatusCode.Unauthorized, "Invalid login / password.");
+                    throw new AccessDeniedException("Invalid login / password.");
                 }
 
                 user.PasswordHash = passwordHasher.HashPassword(user, command.AccountDto.NewPassword);

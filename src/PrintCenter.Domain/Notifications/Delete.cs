@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
@@ -53,7 +52,7 @@ namespace PrintCenter.Domain.Notifications
 
                 if (notifications == null || !notifications.Any())
                 {
-                    throw new RestException(HttpStatusCode.NotFound, "Notifications not found.");
+                    throw new NotFoundException("Notifications not found.");
                 }
 
                 context.Notifications.RemoveRange(notifications);

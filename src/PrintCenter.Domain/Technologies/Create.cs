@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Net;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -59,7 +58,7 @@ namespace PrintCenter.Domain.Technologies
             {
                 if (await context.Technologies.Where(x => x.Name == command.TechnologyDto.Name).AnyAsync(cancellationToken))
                 {
-                    throw new RestException(HttpStatusCode.BadRequest, $"Technology with name {command.TechnologyDto.Name} already exits.");
+                    throw new DuplicateException<Technology>(command.TechnologyDto.Name);
                 }
 
                 var technology = mapper.Map<Data.Models.Technology>(command.TechnologyDto);
