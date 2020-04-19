@@ -1,4 +1,3 @@
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
@@ -44,7 +43,7 @@ namespace PrintCenter.Domain.Users
 
                 if (user == null)
                 {
-                    throw new RestException(HttpStatusCode.NotFound);
+                    throw new NotFoundException<User>(command.Login);
                 }
 
                 context.Users.Remove(user);

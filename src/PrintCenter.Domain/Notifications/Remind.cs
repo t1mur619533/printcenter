@@ -1,5 +1,4 @@
 using System;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
@@ -58,7 +57,7 @@ namespace PrintCenter.Domain.Notifications
 
                 if (notification == null)
                 {
-                    throw new RestException(HttpStatusCode.NotFound);
+                    throw new NotFoundException("Notifications not found.");
                 }
 
                 notification.DelayedDate = DateTime.Now.AddMinutes(command.Minutes ?? 0);

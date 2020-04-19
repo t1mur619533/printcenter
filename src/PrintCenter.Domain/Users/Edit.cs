@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
@@ -67,7 +66,7 @@ namespace PrintCenter.Domain.Users
 
                 if (user == null)
                 {
-                    throw new RestException(HttpStatusCode.BadRequest, $"Account with login {command.Login} not found.");
+                    throw new NotFoundException<User>(command.Login);
                 }
 
                 user.Name = command.UserDto.Name ?? user.Name;

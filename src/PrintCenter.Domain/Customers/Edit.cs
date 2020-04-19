@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Net;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -56,7 +55,7 @@ namespace PrintCenter.Domain.Customers
 
                 if (customer == null)
                 {
-                    throw new RestException(HttpStatusCode.NotFound);
+                    throw new NotFoundException<Customer>($"id {command.Id}");
                 }
                 
                 mapper.Map(command.CustomerDto, customer);

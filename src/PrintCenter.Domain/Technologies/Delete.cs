@@ -1,4 +1,3 @@
-﻿using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -35,7 +34,7 @@ namespace PrintCenter.Domain.Technologies
 
                 if (technology == null)
                 {
-                    throw new RestException(HttpStatusCode.NotFound);
+                    throw new NotFoundException<Technology>($"id {command.Id}");
                 }
 
                 context.Technologies.Remove(technology);
