@@ -56,13 +56,13 @@ namespace PrintCenter.Auth.Accounts
 
                 if (user == null)
                 {
-                    throw new AccessDeniedException("Invalid login / password.");
+                    throw new InvalidArgumentException("Invalid login / password.");
                 }
 
                 if (passwordHasher.VerifyHashedPassword(user, user.PasswordHash, command.AccountDto.OldPassword)
                     .Equals(PasswordVerificationResult.Failed))
                 {
-                    throw new AccessDeniedException("Invalid login / password.");
+                    throw new InvalidArgumentException("Invalid login / password.");
                 }
 
                 user.PasswordHash = passwordHasher.HashPassword(user, command.AccountDto.NewPassword);

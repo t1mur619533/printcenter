@@ -63,13 +63,13 @@ namespace PrintCenter.Auth.Accounts
                 var user = await context.Users.AsNoTracking().SingleOrDefaultAsync(x => x.Login == message.AccountDto.Login, cancellationToken);
                 if (user == null)
                 {
-                    throw new AccessDeniedException("Invalid login / password.");
+                    throw new InvalidArgumentException("Invalid login / password.");
                 }
 
                 if (passwordHasher.VerifyHashedPassword(user, user.PasswordHash, message.AccountDto.Password) ==
                     PasswordVerificationResult.Failed)
                 {
-                    throw new AccessDeniedException("Invalid login / password.");
+                    throw new InvalidArgumentException("Invalid login / password.");
                 }
 
                 var account = mapper.Map<Account>(user);

@@ -41,6 +41,10 @@ namespace PrintCenter.Auth.Middlewares
                     errors = accessDeniedException.Message;
                     context.Response.StatusCode = StatusCodes.Status422UnprocessableEntity;
                     break;
+                case InvalidArgumentException invalidArgumentException:
+                    errors = invalidArgumentException.Message;
+                    context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                    break;
                 case ValidationException validationException:
                     errors = validationException.Errors;
                     context.Response.StatusCode = StatusCodes.Status400BadRequest;

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using PrintCenter.Auth.Accounts;
 using PrintCenter.Auth.Middlewares;
 using PrintCenter.Data;
 using PrintCenter.Infrastructure.Accessors;
@@ -50,7 +51,7 @@ namespace PrintCenter.Auth
             services
                 .AddControllers(opt => { opt.Filters.Add(typeof(ValidatorActionFilter)); })
                 .AddJsonOptions(opt => { opt.JsonSerializerOptions.IgnoreNullValues = true; })
-                .AddFluentValidation(cfg => { cfg.RegisterValidatorsFromAssemblyContaining<Domain.Users.User>(); });
+                .AddFluentValidation(cfg => { cfg.RegisterValidatorsFromAssemblyContaining<Account>(); });
             services.AddSwagger();
             services.AddJwtAuthentication(Configuration, environment);
             services.AddAuthorization();

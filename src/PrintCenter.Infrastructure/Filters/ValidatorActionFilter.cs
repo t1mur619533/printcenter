@@ -1,5 +1,5 @@
 using System.Linq;
-using System.Net;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
@@ -20,7 +20,7 @@ namespace PrintCenter.Infrastructure.Filters
             result.Content = content;
             result.ContentType = "application/json";
 
-            filterContext.HttpContext.Response.StatusCode = (int) HttpStatusCode.UnprocessableEntity;
+            filterContext.HttpContext.Response.StatusCode = StatusCodes.Status422UnprocessableEntity;
             filterContext.Result = result;
         }
 

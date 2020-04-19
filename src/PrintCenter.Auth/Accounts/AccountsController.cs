@@ -25,8 +25,8 @@ namespace PrintCenter.Auth.Accounts
         [HttpPost("Login")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
         public async Task<AccountEnvelope> Post([FromBody] Login.Command command)
         {
             return await mediator.Send(command);
@@ -34,7 +34,7 @@ namespace PrintCenter.Auth.Accounts
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(string))]
         public async Task<UserEnvelope> Get()
         {
             return await mediator.Send(new Details.Query(currentUserIdentifier.GetUsername()));
@@ -42,8 +42,9 @@ namespace PrintCenter.Auth.Accounts
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
         public async Task Put([FromBody] EditPassword.Command command)
         {
             command.Login = currentUserIdentifier.GetUsername();
