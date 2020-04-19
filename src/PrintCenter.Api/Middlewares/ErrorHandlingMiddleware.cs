@@ -1,5 +1,4 @@
 using System;
-using System.Net;
 using System.Threading.Tasks;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
@@ -40,29 +39,29 @@ namespace PrintCenter.Api.Middlewares
             {
                 case NotFoundException notFoundException:
                     errors = notFoundException.Message;
-                    context.Response.StatusCode = (int) HttpStatusCode.NotFound;
+                    context.Response.StatusCode = StatusCodes.Status404NotFound;
                     break;
                 case DuplicateException duplicateException:
                     errors = duplicateException.Message;
-                    context.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                    context.Response.StatusCode = StatusCodes.Status400BadRequest;
                     break;
                 case InvalidArgumentException invalidArgumentException:
                     errors = invalidArgumentException.Message;
-                    context.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                    context.Response.StatusCode = StatusCodes.Status400BadRequest;
                     break;
                 case AccessDeniedException accessDeniedException:
                     errors = accessDeniedException.Message;
-                    context.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
+                    context.Response.StatusCode = StatusCodes.Status422UnprocessableEntity;
                     break;
                 case ValidationException validationException:
                     errors = validationException.Errors;
-                    context.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                    context.Response.StatusCode = StatusCodes.Status400BadRequest;
                     break;
                 case { } e:
                     logger.LogError(string.IsNullOrWhiteSpace(e.Message) ? e.ToString() : e.Message);
                     errors =
                         "The server encountered an internal error or misconfiguration and was unable to complete your request. Please contact the server administrator.";
-                    context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
+                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                     break;
             }
 
