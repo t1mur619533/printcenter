@@ -1,4 +1,4 @@
-name: Build
+name: build-and-test
 
 on:
   push:
@@ -21,5 +21,5 @@ jobs:
       run: dotnet restore PrintCenter.sln
     - name: Build
       run: dotnet build PrintCenter.sln --configuration Release --no-restore
-#    - name: Test
-#      run: dotnet test --no-restore --verbosity normal
+    - name: Test
+      run: dotnet test PrintCenter.sln --no-restore --verbosity normal
