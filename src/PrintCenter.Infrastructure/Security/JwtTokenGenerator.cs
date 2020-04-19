@@ -15,7 +15,7 @@ namespace PrintCenter.Infrastructure.Security
             this.configuration = configuration;
         }
         
-        public string CreateToken(string username, string role)
+        public string CreateToken(int userId, string username, string role)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var keyval = configuration["Secret"];
@@ -24,8 +24,9 @@ namespace PrintCenter.Infrastructure.Security
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, username),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType, role)
+                    new Claim(ClaimTypes.UserId, userId.ToString()),
+                    new Claim(ClaimTypes.UserName, username),
+                    new Claim(ClaimTypes.Role, role)
                 }),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
                     SecurityAlgorithms.HmacSha256Signature),

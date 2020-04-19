@@ -9,7 +9,7 @@ using PrintCenter.Data;
 using PrintCenter.Domain.Exceptions;
 using PrintCenter.Infrastructure.Security;
 
-namespace PrintCenter.Domain.Accounts
+namespace PrintCenter.Auth.Accounts
 {
     public class Login
     {
@@ -73,7 +73,7 @@ namespace PrintCenter.Domain.Accounts
                 }
 
                 var account = mapper.Map<Account>(user);
-                account.Token = jwtTokenGenerator.CreateToken(user.Login, user.Role.ToString());
+                account.Token = jwtTokenGenerator.CreateToken(user.Id, user.Login, user.Role.ToString());
 
                 return new AccountEnvelope(account);
             }

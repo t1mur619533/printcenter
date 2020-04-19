@@ -1,7 +1,9 @@
 namespace PrintCenter.Infrastructure.Accessors
 {
-    public interface ICurrentUserAccessor
+    public interface ICurrentUserIdentifier
     {
+        string GetUserId();
+
         string GetUsername();
 
         string GetRole();

@@ -1,7 +1,7 @@
 using System.Net;
 using Microsoft.AspNetCore.Http;
 
-namespace PrintCenter.Api
+namespace PrintCenter.Infrastructure.Extensions
 {
     public static class HttpContextExtensions
     {

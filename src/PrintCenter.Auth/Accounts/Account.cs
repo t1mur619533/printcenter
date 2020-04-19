@@ -1,4 +1,4 @@
-namespace PrintCenter.Domain.Accounts
+namespace PrintCenter.Auth.Accounts
 {
     public class Account
     {

@@ -8,16 +8,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using PrintCenter.Api.Middlewares;
+using PrintCenter.Auth.Middlewares;
 using PrintCenter.Data;
 using PrintCenter.Infrastructure.Accessors;
 using PrintCenter.Infrastructure.Filters;
 using PrintCenter.Infrastructure.Security;
 
-namespace PrintCenter.Api
+namespace PrintCenter.Auth
 {
-    public class Startup
-    {
+	public class Startup
+	{
         private readonly IWebHostEnvironment environment;
         public IConfiguration Configuration { get; }
 
@@ -44,22 +44,22 @@ namespace PrintCenter.Api
             services.AddScoped<ICurrentUserIdentifier, CurrentUserIdentifier>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            services.AddMediatR();
-            services.AddAutoMapper();
+            //services.AddMediatR();
+            //services.AddAutoMapper();
             services.AddCors();
             services
                 .AddControllers(opt => { opt.Filters.Add(typeof(ValidatorActionFilter)); })
                 .AddJsonOptions(opt => { opt.JsonSerializerOptions.IgnoreNullValues = true; })
                 .AddFluentValidation(cfg => { cfg.RegisterValidatorsFromAssemblyContaining<Domain.Users.User>(); });
-            services.AddSwagger();
-            services.AddJwtAuthentication(Configuration, environment);
+            //services.AddSwagger();
+            //services.AddJwtAuthentication(Configuration, environment);
             services.AddAuthorization();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddSerilogLogging();
+            //loggerFactory.AddSerilogLogging();
 
             //EnsureCreated() обходит миграции, чтобы создать схему. Использовать с InMemoryDatabase 
             //scope.ServiceProvider.GetRequiredService<DataContext>().Database.EnsureCreated();
@@ -73,7 +73,7 @@ namespace PrintCenter.Api
 
             app.UseCors();
 
-            app.UseConfiguredSwagger();
+            //app.UseConfiguredSwagger();
 
             app.UseHttpsRedirection();
 

@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\PrintCenter.Api\PrintCenter.Api.csproj" />
+    <ProjectReference Include="..\..\src\PrintCenter.Auth\PrintCenter.Auth.csproj" />
     <ProjectReference Include="..\..\src\PrintCenter.Data\PrintCenter.Data.csproj" />
     <ProjectReference Include="..\..\src\PrintCenter.Domain\PrintCenter.Domain.csproj" />
     <ProjectReference Include="..\..\src\PrintCenter.Infrastructure\PrintCenter.Infrastructure.csproj" />

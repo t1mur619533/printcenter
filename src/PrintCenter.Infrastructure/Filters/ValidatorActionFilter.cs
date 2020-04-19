@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
 
-namespace PrintCenter.Api
+namespace PrintCenter.Infrastructure.Filters
 {
     public class ValidatorActionFilter : IActionFilter
     {

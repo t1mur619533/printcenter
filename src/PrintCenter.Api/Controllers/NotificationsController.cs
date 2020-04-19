@@ -14,30 +14,30 @@ namespace PrintCenter.Api.Controllers
     public class NotificationsController : ControllerBase
     {
         private readonly IMediator mediator;
-        private readonly ICurrentUserAccessor currentUserAccessor;
+        private readonly ICurrentUserIdentifier currentUserIdentifier;
 
-        public NotificationsController(IMediator mediator, ICurrentUserAccessor currentUserAccessor)
+        public NotificationsController(IMediator mediator, ICurrentUserIdentifier currentUserIdentifier)
         {
             this.mediator = mediator;
-            this.currentUserAccessor = currentUserAccessor;
+            this.currentUserIdentifier = currentUserIdentifier;
         }
 
         [HttpPut]
         public async Task Post(int id, [FromQuery] int? minutes)
         {
-            await mediator.Send(new Remind.Command(currentUserAccessor.GetUsername(), id, minutes));
+            await mediator.Send(new Remind.Command(currentUserIdentifier.GetUsername(), id, minutes));
         }
 
         [HttpGet]
         public async Task<NotificationsEnvelope> Get([FromQuery] int? limit, [FromQuery] int? offset)
         {
-            return await mediator.Send(new List.Query(currentUserAccessor.GetUsername(), offset, limit));
+            return await mediator.Send(new List.Query(currentUserIdentifier.GetUsername(), offset, limit));
         }
 
         [HttpDelete]
         public async Task Delete([FromBody] List<int> notifications)
         {
-            await mediator.Send(new Delete.Command(currentUserAccessor.GetUsername(), notifications));
+            await mediator.Send(new Delete.Command(currentUserIdentifier.GetUsername(), notifications));
         }
     }
 }

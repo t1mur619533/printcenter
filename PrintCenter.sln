@@ -10,6 +10,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrintCenter.Data", "src\PrintCenter.Data\PrintCenter.Data.csproj", "{D218115B-C459-4B20-8723-2A085C796CBE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{2CC239C4-3C30-4634-A179-CC825021C13A}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet.Config = NuGet.Config
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{9439A166-743B-4473-BA05-9C3A0B69D0CC}"
 EndProject
@@ -22,6 +25,8 @@ EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{44723FEF-6BB2-44F1-99ED-5CE3378BC37B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrintCenter.Tests", "tests\PrintCenter.Tests\PrintCenter.Tests.csproj", "{2F0728B2-E433-458B-8177-3D67CEAFE232}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrintCenter.Auth", "src\PrintCenter.Auth\PrintCenter.Auth.csproj", "{1A921D25-0EB1-44DA-B0F5-C0EA727A7A4A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +60,10 @@ Global
 		{2F0728B2-E433-458B-8177-3D67CEAFE232}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F0728B2-E433-458B-8177-3D67CEAFE232}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F0728B2-E433-458B-8177-3D67CEAFE232}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A921D25-0EB1-44DA-B0F5-C0EA727A7A4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A921D25-0EB1-44DA-B0F5-C0EA727A7A4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A921D25-0EB1-44DA-B0F5-C0EA727A7A4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A921D25-0EB1-44DA-B0F5-C0EA727A7A4A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -65,6 +74,7 @@ Global
 		{D218115B-C459-4B20-8723-2A085C796CBE} = {BE416F1C-D060-41A7-8A80-E895D739B351}
 		{491C0005-A9FC-4252-B667-AD39A82989D8} = {BE416F1C-D060-41A7-8A80-E895D739B351}
 		{2F0728B2-E433-458B-8177-3D67CEAFE232} = {9439A166-743B-4473-BA05-9C3A0B69D0CC}
+		{1A921D25-0EB1-44DA-B0F5-C0EA727A7A4A} = {BE416F1C-D060-41A7-8A80-E895D739B351}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B6CCE505-9409-4769-BE30-0C817DB524A3}

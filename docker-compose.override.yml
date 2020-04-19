@@ -12,3 +12,15 @@ services:
     volumes:
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
       - /app/Logs
+  printcenter.auth:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5001
+      - ConnectionStrings:DefaultConnection=Host=postgres;Port=5432;Database=printcenter;Username=printcenter;Password=printcenter
+      - Secret=printcenterprintcenterprintcenterprintcenterprintc
+    ports:
+      - "5001:5001"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      - /app/Logs

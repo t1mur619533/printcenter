@@ -9,7 +9,7 @@ using PrintCenter.Data;
 using PrintCenter.Data.Models;
 using PrintCenter.Domain.Exceptions;
 
-namespace PrintCenter.Domain.Accounts
+namespace PrintCenter.Auth.Accounts
 {
     public class EditPassword
     {

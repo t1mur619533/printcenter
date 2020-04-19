@@ -5,6 +5,17 @@ networks:
     driver: bridge 
 
 services:
+
+  printcenter.auth:
+    image: ${DOCKER_REGISTRY-}printcenterauth
+    depends_on:
+      - "postgres"
+    build:
+      context: .
+      dockerfile: src/PrintCenter.Auth/Dockerfile
+    networks:
+      - printcenter-dev
+
   printcenter.api:
     container_name: printcenter_container
     image: ${DOCKER_REGISTRY-}printcenterapi

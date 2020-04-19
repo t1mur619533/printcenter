@@ -8,8 +8,8 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["src/PrintCenter.Api/PrintCenter.Api.csproj", "src/PrintCenter.Api/"]
-COPY ["src/PrintCenter.Domain/PrintCenter.Domain.csproj", "src/PrintCenter.Domain/"]
 COPY ["src/PrintCenter.Data/PrintCenter.Data.csproj", "src/PrintCenter.Data/"]
+COPY ["src/PrintCenter.Domain/PrintCenter.Domain.csproj", "src/PrintCenter.Domain/"]
 COPY ["src/PrintCenter.Infrastructure/PrintCenter.Infrastructure.csproj", "src/PrintCenter.Infrastructure/"]
 RUN dotnet restore "src/PrintCenter.Api/PrintCenter.Api.csproj"
 COPY . .

@@ -2,6 +2,6 @@ namespace PrintCenter.Infrastructure.Security
 {
     public interface IJwtTokenGenerator
     {
-        string CreateToken(string username, string role);
+        string CreateToken(int userId, string username, string role);
     }
 }
