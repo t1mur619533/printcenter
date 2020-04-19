@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Threading.Tasks;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -52,6 +53,10 @@ namespace PrintCenter.Api.Middlewares
                 case AccessDeniedException accessDeniedException:
                     errors = accessDeniedException.Message;
                     context.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
+                    break;
+                case ValidationException validationException:
+                    errors = validationException.Errors;
+                    context.Response.StatusCode = (int) HttpStatusCode.BadRequest;
                     break;
                 case { } e:
                     logger.LogError(string.IsNullOrWhiteSpace(e.Message) ? e.ToString() : e.Message);
