@@ -17,6 +17,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using PrintCenter.Auth.Accounts;
 using PrintCenter.Data;
 using PrintCenter.Data.Models;
 using PrintCenter.Domain.Infrastructure;
@@ -74,7 +75,7 @@ namespace PrintCenter.Auth
 
         public static IServiceCollection AddMediatR(this IServiceCollection services)
         {
-            services.AddMediatR(Assembly.GetAssembly(typeof(UsersEnvelope)));
+            services.AddMediatR(Assembly.GetAssembly(typeof(Account)));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(TransactionPipelineBehavior<,>));
             return services;
