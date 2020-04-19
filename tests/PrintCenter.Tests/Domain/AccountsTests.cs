@@ -116,7 +116,7 @@ namespace PrintCenter.Tests.Domain
                 var result = await Assert.ThrowsAnyAsync<Exception>(async () => { await mediator.Send(command); });
 
                 // Asserts
-                Assert.IsAssignableFrom<AccessDeniedException>(result);
+                Assert.IsAssignableFrom<InvalidArgumentException>(result);
             }
         }
 
@@ -150,7 +150,7 @@ namespace PrintCenter.Tests.Domain
                 var result = await Assert.ThrowsAnyAsync<Exception>(async () => { await mediator.Send(command); });
 
                 // Asserts
-                Assert.IsAssignableFrom<AccessDeniedException>(result);
+                Assert.IsAssignableFrom<InvalidArgumentException>(result);
             }
         }
     }
