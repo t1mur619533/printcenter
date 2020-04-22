@@ -7,11 +7,11 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PrintCenter.Data;
 
-namespace PrintCenter.Domain.Notifications
+namespace PrintCenter.Domain.Tickets
 {
     public class List
     {
-        public class Query : IRequest<NotificationsEnvelope>
+        public class Query : IRequest<TicketsEnvelope>
         {
             public Query(string login, int? offset = 0, int? limit = 20)
             {
@@ -37,7 +37,7 @@ namespace PrintCenter.Domain.Notifications
             }
         }
 
-        public class QueryHandler : IRequestHandler<Query, NotificationsEnvelope>
+        public class QueryHandler : IRequestHandler<Query, TicketsEnvelope>
         {
             private readonly DataContext context;
 
@@ -46,9 +46,9 @@ namespace PrintCenter.Domain.Notifications
                 this.context = context;
             }
 
-            public async Task<NotificationsEnvelope> Handle(Query query, CancellationToken cancellationToken)
+            public async Task<TicketsEnvelope> Handle(Query query, CancellationToken cancellationToken)
             {
-                var notifications = await context.Notifications
+                var notifications = await context.Tickets
                     .Include(_ => _.User)
                     .Where(_ => _.User.Login.Equals(query.Login))
                     .Where(_ => _.DelayedDate <= DateTime.Now)
@@ -57,7 +57,7 @@ namespace PrintCenter.Domain.Notifications
                     .AsNoTracking()
                     .ToListAsync(cancellationToken);
 
-                return new NotificationsEnvelope(notifications);
+                return new TicketsEnvelope(notifications);
             }
         }
     }

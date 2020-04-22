@@ -42,7 +42,7 @@ namespace PrintCenter.Data
 
         public DbSet<MaterialMovement> MaterialMovements { get; set; }
 
-        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
 
         public DbSet<UserTechnology> UserTechnologies { get; set; }
 

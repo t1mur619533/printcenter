@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PrintCenter.Domain.Notifications;
+using PrintCenter.Domain.Tickets;
 using PrintCenter.Infrastructure.Accessors;
 
 namespace PrintCenter.Api.Controllers
@@ -11,12 +11,12 @@ namespace PrintCenter.Api.Controllers
     [Route("api/Users/[controller]")]
     [ApiController]
     [Authorize]
-    public class NotificationsController : ControllerBase
+    public class TicketsController : ControllerBase
     {
         private readonly IMediator mediator;
         private readonly ICurrentUserAccessor currentUserAccessor;
 
-        public NotificationsController(IMediator mediator, ICurrentUserAccessor currentUserAccessor)
+        public TicketsController(IMediator mediator, ICurrentUserAccessor currentUserAccessor)
         {
             this.mediator = mediator;
             this.currentUserAccessor = currentUserAccessor;
@@ -29,7 +29,7 @@ namespace PrintCenter.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<NotificationsEnvelope> Get([FromQuery] int? limit, [FromQuery] int? offset)
+        public async Task<TicketsEnvelope> Get([FromQuery] int? limit, [FromQuery] int? offset)
         {
             return await mediator.Send(new List.Query(currentUserAccessor.GetUsername(), offset, limit));
         }

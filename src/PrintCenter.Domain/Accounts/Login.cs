@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PrintCenter.Data;
+using PrintCenter.Data.Models;
 using PrintCenter.Domain.Exceptions;
 using PrintCenter.Infrastructure.Security;
 
@@ -46,10 +47,10 @@ namespace PrintCenter.Domain.Accounts
         {
             private readonly DataContext context;
             private readonly IMapper mapper;
-            private readonly IPasswordHasher<Data.Models.User> passwordHasher;
+            private readonly IPasswordHasher<User> passwordHasher;
             private readonly IJwtTokenGenerator jwtTokenGenerator;
 
-            public Handler(DataContext context, IPasswordHasher<Data.Models.User> passwordHasher, IMapper mapper,
+            public Handler(DataContext context, IPasswordHasher<User> passwordHasher, IMapper mapper,
                 IJwtTokenGenerator jwtTokenGenerator)
             {
                 this.context = context;
@@ -70,6 +71,11 @@ namespace PrintCenter.Domain.Accounts
                     PasswordVerificationResult.Failed)
                 {
                     throw new AccessDeniedException("Invalid login / password.");
+                }
+
+                if (user.Role == Role.Disable)
+                {
+                    throw new AccessDeniedException("Account is blocked.");
                 }
 
                 var account = mapper.Map<Account>(user);

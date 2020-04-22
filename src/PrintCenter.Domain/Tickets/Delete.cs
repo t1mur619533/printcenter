@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using PrintCenter.Data;
 using PrintCenter.Domain.Exceptions;
 
-namespace PrintCenter.Domain.Notifications
+namespace PrintCenter.Domain.Tickets
 {
     public class Delete
     {
@@ -16,13 +16,13 @@ namespace PrintCenter.Domain.Notifications
         {
             public Command(string login, IEnumerable<int> notifications)
             {
-                Notifications = notifications;
+                Tickets = notifications;
                 Login = login;
             }
 
             public string Login { get; }
 
-            public IEnumerable<int> Notifications { get; set; }
+            public IEnumerable<int> Tickets { get; set; }
         }
 
         public class CommandValidator : AbstractValidator<Command>
@@ -30,7 +30,7 @@ namespace PrintCenter.Domain.Notifications
             public CommandValidator()
             {
                 RuleFor(x => x.Login).NotNull().NotEmpty();
-                RuleFor(x => x.Notifications).NotNull().Must(_ => _.Any());
+                RuleFor(x => x.Tickets).NotNull().Must(_ => _.Any());
             }
         }
 
@@ -45,9 +45,9 @@ namespace PrintCenter.Domain.Notifications
 
             public async Task<Unit> Handle(Command command, CancellationToken cancellationToken)
             {
-                var notifications = await context.Notifications
+                var notifications = await context.Tickets
                     .Include(_ => _.User)
-                    .Where(_ => command.Notifications.Contains(_.Id) && _.User.Login.Equals(command.Login))
+                    .Where(_ => command.Tickets.Contains(_.Id) && _.User.Login.Equals(command.Login))
                     .ToListAsync(cancellationToken);
 
                 if (notifications == null || !notifications.Any())
@@ -55,7 +55,7 @@ namespace PrintCenter.Domain.Notifications
                     throw new NotFoundException("Notifications not found.");
                 }
 
-                context.Notifications.RemoveRange(notifications);
+                context.Tickets.RemoveRange(notifications);
 
                 await context.SaveChangesAsync(cancellationToken);
 

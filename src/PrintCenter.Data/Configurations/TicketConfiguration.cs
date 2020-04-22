@@ -4,9 +4,9 @@ using PrintCenter.Data.Models;
 
 namespace PrintCenter.Data.Configurations
 {
-    class NotificationConfiguration : IEntityTypeConfiguration<Notification>
+    class TicketConfiguration : IEntityTypeConfiguration<Ticket>
     {
-        public void Configure(EntityTypeBuilder<Notification> builder)
+        public void Configure(EntityTypeBuilder<Ticket> builder)
         {
             builder.HasKey(_ => _.Id);
             

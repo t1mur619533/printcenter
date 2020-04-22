@@ -6,7 +6,7 @@ namespace PrintCenter.Domain.Users
     {
         public MappingProfile()
         {
-            CreateMap<Create.UserDto, Data.Models.User>(MemberList.None);
+            CreateMap<Create.Command, Data.Models.User>(MemberList.None);
             CreateMap<Data.Models.User, User>(MemberList.None);
             CreateMap<Data.Models.User, User>(MemberList.None);
             CreateMap<Data.Models.User, UserEnvelope>(MemberList.None)
