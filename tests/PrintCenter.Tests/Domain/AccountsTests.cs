@@ -44,7 +44,8 @@ namespace PrintCenter.Tests.Domain
 
                 var command = new EditPassword.Command()
                 {
-                    AccountDto = new EditPassword.AccountDto() {OldPassword = passOld, NewPassword = passNew},
+                    OldPassword = passOld,
+                    NewPassword = passNew,
                     Login = name
                 };
 
@@ -82,7 +83,8 @@ namespace PrintCenter.Tests.Domain
 
                 var command = new EditPassword.Command()
                 {
-                    AccountDto = new EditPassword.AccountDto() {OldPassword = passOld, NewPassword = passNew},
+                    OldPassword = passOld, 
+                    NewPassword = passNew,
                     Login = name
                 };
 
@@ -108,7 +110,8 @@ namespace PrintCenter.Tests.Domain
 
                 var command = new EditPassword.Command()
                 {
-                    AccountDto = new EditPassword.AccountDto() {OldPassword = passOld, NewPassword = passNew},
+                    OldPassword = passOld, 
+                    NewPassword = passNew,
                     Login = name
                 };
 
@@ -116,7 +119,7 @@ namespace PrintCenter.Tests.Domain
                 var result = await Assert.ThrowsAnyAsync<Exception>(async () => { await mediator.Send(command); });
 
                 // Asserts
-                Assert.IsAssignableFrom<AccessDeniedException>(result);
+                Assert.IsAssignableFrom<InvalidArgumentException>(result);
             }
         }
 
@@ -142,7 +145,8 @@ namespace PrintCenter.Tests.Domain
 
                 var command = new EditPassword.Command()
                 {
-                    AccountDto = new EditPassword.AccountDto() { OldPassword = passOld, NewPassword = passNew },
+                    OldPassword = passOld,
+                    NewPassword = passNew,
                     Login = name
                 };
 
@@ -150,7 +154,7 @@ namespace PrintCenter.Tests.Domain
                 var result = await Assert.ThrowsAnyAsync<Exception>(async () => { await mediator.Send(command); });
 
                 // Asserts
-                Assert.IsAssignableFrom<AccessDeniedException>(result);
+                Assert.IsAssignableFrom<InvalidArgumentException>(result);
             }
         }
     }

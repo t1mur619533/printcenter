@@ -13,28 +13,22 @@ namespace PrintCenter.Domain.Accounts
 {
     public class EditPassword
     {
-        public class AccountDto
-        {
-            public string OldPassword { get; set; }
-
-            public string NewPassword { get; set; }
-        }
-
         public class Command : IRequest
         {
             [JsonIgnore]
             public string Login { get; set; }
 
-            public AccountDto AccountDto { get; set; }
+            public string OldPassword { get; set; }
+
+            public string NewPassword { get; set; }
         }
 
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
-                RuleFor(x => x.AccountDto).NotNull();
-                RuleFor(x => x.AccountDto.OldPassword).NotNull().NotEmpty().Length(6, 255);
-                RuleFor(x => x.AccountDto.NewPassword).NotNull().NotEmpty().Length(6, 255);
+                RuleFor(x => x.OldPassword).NotNull().NotEmpty().Length(6, 255);
+                RuleFor(x => x.NewPassword).NotNull().NotEmpty().Length(6, 255);
                 RuleFor(x => x.Login).NotNull().NotEmpty();
             }
         }
@@ -56,16 +50,16 @@ namespace PrintCenter.Domain.Accounts
 
                 if (user == null)
                 {
-                    throw new AccessDeniedException("Invalid login / password.");
+                    throw new InvalidArgumentException("Invalid login / password.");
                 }
 
-                if (passwordHasher.VerifyHashedPassword(user, user.PasswordHash, command.AccountDto.OldPassword)
+                if (passwordHasher.VerifyHashedPassword(user, user.PasswordHash, command.OldPassword)
                     .Equals(PasswordVerificationResult.Failed))
                 {
-                    throw new AccessDeniedException("Invalid login / password.");
+                    throw new InvalidArgumentException("Invalid login / password.");
                 }
 
-                user.PasswordHash = passwordHasher.HashPassword(user, command.AccountDto.NewPassword);
+                user.PasswordHash = passwordHasher.HashPassword(user, command.NewPassword);
 
                 await context.SaveChangesAsync(cancellationToken);
 

@@ -14,32 +14,19 @@ namespace PrintCenter.Domain.Accounts
 {
     public class Login
     {
-        public class AccountDto
+        public class Command : IRequest<AccountEnvelope>
         {
             public string Login { get; set; }
 
             public string Password { get; set; }
         }
 
-        public class AccountDtoValidator : AbstractValidator<AccountDto>
-        {
-            public AccountDtoValidator()
-            {
-                RuleFor(x => x.Login).NotNull().NotEmpty();
-                RuleFor(x => x.Password).NotNull().NotEmpty();
-            }
-        }
-
-        public class Command : IRequest<AccountEnvelope>
-        {
-            public AccountDto AccountDto { get; set; }
-        }
-
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
-                RuleFor(x => x.AccountDto).NotNull().SetValidator(new AccountDtoValidator());
+                RuleFor(x => x.Login).NotNull().NotEmpty();
+                RuleFor(x => x.Password).NotNull().NotEmpty();
             }
         }
 
@@ -59,18 +46,24 @@ namespace PrintCenter.Domain.Accounts
                 this.jwtTokenGenerator = jwtTokenGenerator;
             }
 
-            public async Task<AccountEnvelope> Handle(Command message, CancellationToken cancellationToken)
+            public async Task<AccountEnvelope> Handle(Command command, CancellationToken cancellationToken)
             {
-                var user = await context.Users.AsNoTracking().SingleOrDefaultAsync(x => x.Login == message.AccountDto.Login, cancellationToken);
+                var user = await context.Users.AsNoTracking()
+                    .SingleOrDefaultAsync(x => x.Login == command.Login, cancellationToken);
                 if (user == null)
                 {
-                    throw new AccessDeniedException("Invalid login / password.");
+                    throw new InvalidArgumentException("Invalid login / password.");
                 }
 
-                if (passwordHasher.VerifyHashedPassword(user, user.PasswordHash, message.AccountDto.Password) ==
+                if (passwordHasher.VerifyHashedPassword(user, user.PasswordHash, command.Password) ==
                     PasswordVerificationResult.Failed)
                 {
-                    throw new AccessDeniedException("Invalid login / password.");
+                    throw new InvalidArgumentException("Invalid login / password.");
+                }
+
+                if (user.Role == Role.Disable)
+                {
+                    throw new AccessDeniedException("Account is blocked.");
                 }
 
                 if (user.Role == Role.Disable)
