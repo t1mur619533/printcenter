@@ -68,11 +68,11 @@ namespace PrintCenter.Domain.Users
             }
         }
 
-        public class RequestPostProcessor : IRequestPostProcessor<Command, User>
+        public class CommandPostProcessor : IRequestPostProcessor<Command, User>
         {
             private readonly DataContext context;
 
-            public RequestPostProcessor(DataContext context)
+            public CommandPostProcessor(DataContext context)
             {
                 this.context = context;
             }
