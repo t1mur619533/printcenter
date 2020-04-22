@@ -26,7 +26,8 @@ namespace PrintCenter.Api.Controllers
         [HttpPost]
         public async Task Post([FromBody] Create.Command command)
         {
-            await mediator.Send(command);
+            var created = await mediator.Send(command);
+            await mediator.Publish(new Create.Notification(created));
         }
 
 

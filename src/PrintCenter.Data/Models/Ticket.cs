@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace PrintCenter.Data.Models
 {
-    public class Notification : IHasId
+    public class Ticket : IHasId
     {
         public int Id { get; set; }
         
@@ -19,7 +19,7 @@ namespace PrintCenter.Data.Models
         [JsonIgnore]
         public DateTime DelayedDate { get; set; }
 
-        public Notification()
+        public Ticket()
         {
             CreatedDate = DateTime.Now;
             DelayedDate = DateTime.Now;

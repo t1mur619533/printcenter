@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 using PrintCenter.Data;
 using PrintCenter.Domain.Exceptions;
 
-namespace PrintCenter.Domain.Notifications
+namespace PrintCenter.Domain.Tickets
 {
     public class Remind
     {
@@ -50,7 +50,7 @@ namespace PrintCenter.Domain.Notifications
 
             public async Task<Unit> Handle(Command command, CancellationToken cancellationToken)
             {
-                var notification = await context.Notifications
+                var notification = await context.Tickets
                     .Include(_ => _.User)
                     .FirstOrDefaultAsync(x => x.Id.Equals(command.Id) && x.User.Login.Equals(command.Login),
                         cancellationToken);

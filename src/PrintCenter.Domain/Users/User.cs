@@ -1,11 +1,15 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Newtonsoft.Json;
 using PrintCenter.Data.Models;
 
 namespace PrintCenter.Domain.Users
 {
     public class User
     {
+        [JsonIgnore]
+        public int Id { get; set; }
+
         public string Login { get; set; }
 
         public string Name { get; set; }
