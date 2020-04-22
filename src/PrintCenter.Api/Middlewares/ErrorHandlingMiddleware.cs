@@ -51,11 +51,11 @@ namespace PrintCenter.Api.Middlewares
                     break;
                 case AccessDeniedException accessDeniedException:
                     errors = accessDeniedException.Message;
-                    context.Response.StatusCode = StatusCodes.Status422UnprocessableEntity;
+                    context.Response.StatusCode = StatusCodes.Status403Forbidden;
                     break;
                 case ValidationException validationException:
                     errors = validationException.Errors;
-                    context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                    context.Response.StatusCode = StatusCodes.Status422UnprocessableEntity;
                     break;
                 case { } e:
                     logger.LogError(string.IsNullOrWhiteSpace(e.Message) ? e.ToString() : e.Message);
