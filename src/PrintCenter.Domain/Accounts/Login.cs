@@ -66,6 +66,11 @@ namespace PrintCenter.Domain.Accounts
                     throw new AccessDeniedException("Account is blocked.");
                 }
 
+                if (user.Role == Role.Disable)
+                {
+                    throw new AccessDeniedException("Account is blocked.");
+                }
+
                 var account = mapper.Map<Account>(user);
                 account.Token = jwtTokenGenerator.CreateToken(user.Login, user.Role.ToString());
 

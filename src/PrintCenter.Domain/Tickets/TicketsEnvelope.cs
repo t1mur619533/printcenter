@@ -5,11 +5,11 @@ namespace PrintCenter.Domain.Tickets
 {
     public class TicketsEnvelope
     {
-        public List<Ticket> Notifications { get; set; }
+        public List<Ticket> Tickets { get; set; }
 
-        public TicketsEnvelope(List<Ticket> notifications)
+        public TicketsEnvelope(List<Ticket> tickets)
         {
-            Notifications = notifications;
+            Tickets = tickets;
         }
     }
 }
