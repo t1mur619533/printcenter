@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using PrintCenter.Data;
 using PrintCenter.Domain.Exceptions;
 
@@ -21,7 +20,6 @@ namespace PrintCenter.Domain.Tickets
                 Login = login;
             }
 
-            [JsonIgnore]
             public string Login { get; set; }
 
             public int Id { get; set; }
@@ -61,9 +59,7 @@ namespace PrintCenter.Domain.Tickets
                 }
 
                 notification.DelayedDate = DateTime.Now.AddMinutes(command.Minutes ?? 0);
-
                 await context.SaveChangesAsync(cancellationToken);
-
                 return Unit.Value;
             }
         }

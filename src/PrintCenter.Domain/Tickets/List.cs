@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PrintCenter.Data;
+using PrintCenter.Shared;
 
 namespace PrintCenter.Domain.Tickets
 {
@@ -40,15 +43,17 @@ namespace PrintCenter.Domain.Tickets
         public class QueryHandler : IRequestHandler<Query, TicketsEnvelope>
         {
             private readonly DataContext context;
+            private readonly IMapper mapper;
 
-            public QueryHandler(DataContext context)
+            public QueryHandler(DataContext context, IMapper mapper)
             {
                 this.context = context;
+                this.mapper = mapper;
             }
 
             public async Task<TicketsEnvelope> Handle(Query query, CancellationToken cancellationToken)
             {
-                var notifications = await context.Tickets
+                var tickets = await context.Tickets
                     .Include(_ => _.User)
                     .Where(_ => _.User.Login.Equals(query.Login))
                     .Where(_ => _.DelayedDate <= DateTime.Now)
@@ -56,8 +61,9 @@ namespace PrintCenter.Domain.Tickets
                     .Take(query.Limit ?? 20)
                     .AsNoTracking()
                     .ToListAsync(cancellationToken);
+                var count = context.Tickets.AsNoTracking().Count();
 
-                return new TicketsEnvelope(notifications);
+                return new TicketsEnvelope(mapper.Map<List<Ticket>>(tickets), count);
             }
         }
     }

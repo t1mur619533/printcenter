@@ -6,48 +6,34 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PrintCenter.Data;
 using PrintCenter.Domain.Exceptions;
+using PrintCenter.Shared;
 
 namespace PrintCenter.Domain.Materials
 {
     public class Edit
     {
-        public class MaterialDto
-        {
-            public string Name { get; set; }
-
-            public double Parameter { get; set; }
-
-            public string Unit { get; set; }
-
-            public decimal Price { get; set; }
-
-            public string Description { get; set; }
-
-            public double Count { get; set; }
-
-            public double NormalCount { get; set; }
-
-            public double MinimalCount { get; set; }
-        }
-
         public class Command : IRequest<Unit>
         {
-            public MaterialDto MaterialDto { get; set; }
-            public int Id { get; set; }
+            public Material Material { get; set; }
+
+            public Command(Material material)
+            {
+                Material = material;
+            }
         }
-        
+
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
-                RuleFor(material => material.MaterialDto).NotNull();
-                RuleFor(material => material.MaterialDto.Name).NotNull().NotEmpty();
-                RuleFor(material => material.MaterialDto.Parameter).NotEqual(0.0);
-                RuleFor(material => material.MaterialDto.Unit).NotNull().NotEmpty();
-                RuleFor(material => material.MaterialDto.Price).NotEqual(0.0m);
+                RuleFor(material => material).NotNull();
+                RuleFor(material => material.Material.Name).NotNull().NotEmpty();
+                RuleFor(material => material.Material.Parameter).NotEqual(0.0);
+                RuleFor(material => material.Material.Unit).NotNull().NotEmpty();
+                RuleFor(material => material.Material.Price).NotEqual(0.0m);
             }
         }
-        
+
         public class Handler : IRequestHandler<Command>
         {
             private readonly DataContext context;
@@ -61,17 +47,17 @@ namespace PrintCenter.Domain.Materials
 
             public async Task<Unit> Handle(Command command, CancellationToken cancellationToken)
             {
-                var material = await context.Materials.FirstOrDefaultAsync(x => x.Id == command.Id, cancellationToken);
+                var material =
+                    await context.Materials.FirstOrDefaultAsync(x => x.Id.Equals(command.Material.Id),
+                        cancellationToken);
 
                 if (material == null)
                 {
-                    throw new NotFoundException<Material>($"id {command.Id}");
+                    throw new NotFoundException<Material>($"id {command.Material.Id}");
                 }
-                
-                mapper.Map(command.MaterialDto, material);
 
+                mapper.Map(command.Material, material);
                 await context.SaveChangesAsync(cancellationToken);
-
                 return Unit.Value;
             }
         }

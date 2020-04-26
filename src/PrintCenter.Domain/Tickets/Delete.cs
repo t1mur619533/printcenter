@@ -52,13 +52,11 @@ namespace PrintCenter.Domain.Tickets
 
                 if (notifications == null || !notifications.Any())
                 {
-                    throw new NotFoundException("Notifications not found.");
+                    throw new NotFoundException("Tickets not found.");
                 }
 
                 context.Tickets.RemoveRange(notifications);
-
                 await context.SaveChangesAsync(cancellationToken);
-
                 return Unit.Value;
             }
         }

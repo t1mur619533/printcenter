@@ -1,7 +1,8 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PrintCenter.Domain.Technologies;
+using PrintCenter.Shared;
 
 namespace PrintCenter.Api.Controllers
 {
@@ -17,13 +18,13 @@ namespace PrintCenter.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<TechnologiesEnvelope> Get([FromQuery] int? limit, [FromQuery] int? offset)
+        public async Task<TechnologiesEnvelope> Get([FromQuery] int limit, [FromQuery] int offset)
         {
             return await mediator.Send(new List.Query(limit, offset));
         }
         
         [HttpGet("{id}")]
-        public async Task<TechnologyEnvelope> Get(int id)
+        public async Task<Technology> Get(int id)
         {
             return await mediator.Send(new Details.Query(id));
         }
@@ -37,7 +38,7 @@ namespace PrintCenter.Api.Controllers
         [HttpPut("{id}")]
         public async Task Edit(int id, [FromBody]Edit.Command command)
         {
-            command.Id = id;
+            command.Technology.Id = id;
             await mediator.Send(command);
         }
         

@@ -6,10 +6,8 @@ namespace PrintCenter.Domain.Materials
     {
         public MappingProfile()
         {
-            CreateMap<Create.MaterialDto, Data.Models.Material>(MemberList.None);
-            CreateMap<Edit.MaterialDto, Data.Models.Material>(MemberList.None);
-
-            CreateMap<Data.Models.Material, Material>(MemberList.None);
+            CreateMap<Data.Models.Material, Shared.Material>(MemberList.None);
+            CreateMap<Shared.Material, Data.Models.Material>(MemberList.None);
         }
     }
 }

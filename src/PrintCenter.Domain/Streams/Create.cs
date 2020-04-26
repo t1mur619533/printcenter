@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -6,19 +7,18 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PrintCenter.Data;
 using PrintCenter.Domain.Exceptions;
-using PrintCenter.Shared;
 
-namespace PrintCenter.Domain.Technologies
+namespace PrintCenter.Domain.Streams
 {
-    public class Edit
+    public class Create
     {
         public class Command : IRequest<Unit>
         {
-            public Technology Technology { get; set; }
+            public Shared.Stream Stream { get; set; }
 
-            public Command(Technology technology)
+            public Command(Shared.Stream stream)
             {
-                Technology = technology;
+                Stream = stream;
             }
         }
 
@@ -26,9 +26,9 @@ namespace PrintCenter.Domain.Technologies
         {
             public CommandValidator()
             {
-                RuleFor(x => x.Technology).NotNull();
-                RuleFor(x => x.Technology.Name).NotNull().NotEmpty();
-                RuleFor(x => x.Technology.Unit).NotNull().NotEmpty();
+                RuleFor(x => x.Stream).NotNull().NotEmpty();
+                RuleFor(x => x.Stream.Code).NotNull().NotEmpty();
+                RuleFor(x => x.Stream.Name).NotNull().NotEmpty();
             }
         }
 
@@ -45,15 +45,13 @@ namespace PrintCenter.Domain.Technologies
 
             public async Task<Unit> Handle(Command command, CancellationToken cancellationToken)
             {
-                var technology =
-                    await context.Technologies.FirstOrDefaultAsync(x => x.Id == command.Technology.Id, cancellationToken);
-
-                if (technology == null)
+                if (await context.Streams.Where(x => x.Code.Equals(command.Stream.Code)).AnyAsync(cancellationToken))
                 {
-                    throw new NotFoundException<Technology>($"id {command.Technology.Name}");
+                    throw new DuplicateException<Shared.Stream>(command.Stream.Name);
                 }
 
-                mapper.Map(command.Technology, technology);
+                var stream = mapper.Map<Data.Models.Stream>(command.Stream);
+                await context.Streams.AddAsync(stream, cancellationToken);
                 await context.SaveChangesAsync(cancellationToken);
                 return Unit.Value;
             }

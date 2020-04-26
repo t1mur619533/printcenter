@@ -8,23 +8,23 @@ using Microsoft.EntityFrameworkCore;
 using PrintCenter.Data;
 using PrintCenter.Shared;
 
-namespace PrintCenter.Domain.Materials
+namespace PrintCenter.Domain.Streams
 {
     public class List
     {
-        public class Query : IRequest<MaterialsEnvelope>
+        public class Query : IRequest<StreamsEnvelope>
         {
-            public Query(int limit = 100, int offset = 0)
+            public Query(int? limit, int? offset)
             {
                 Limit = limit;
                 Offset = offset;
             }
 
-            public int Limit { get; }
-            public int Offset { get; }
+            public int? Limit { get; }
+            public int? Offset { get; }
         }
 
-        public class QueryHandler : IRequestHandler<Query, MaterialsEnvelope>
+        public class QueryHandler : IRequestHandler<Query, StreamsEnvelope>
         {
             private readonly DataContext context;
             private readonly IMapper mapper;
@@ -35,16 +35,16 @@ namespace PrintCenter.Domain.Materials
                 this.mapper = mapper;
             }
 
-            public async Task<MaterialsEnvelope> Handle(Query query, CancellationToken cancellationToken)
+            public async Task<StreamsEnvelope> Handle(Query query, CancellationToken cancellationToken)
             {
-                var materials = await context.Materials
-                    .Skip(query.Offset)
-                    .Take(query.Limit)
+                var streams = await context.Streams
+                    .Skip(query.Offset ?? 0)
+                    .Take(query.Limit ?? 20)
                     .AsNoTracking()
                     .ToListAsync(cancellationToken);
-                var count = context.Materials.AsNoTracking().Count();
+                var count = context.Streams.AsNoTracking().Count();
 
-                return new MaterialsEnvelope(mapper.Map<List<Material>>(materials), count);
+                return new StreamsEnvelope(mapper.Map<List<Stream>>(streams), count);
             }
         }
     }

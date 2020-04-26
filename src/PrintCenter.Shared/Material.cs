@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
-namespace PrintCenter.Domain.Materials
+namespace PrintCenter.Shared
 {
     public class Material
     {
+        [JsonIgnore]
         public int Id { get; set; }
         
         public string Name { get; set; }
@@ -23,23 +25,10 @@ namespace PrintCenter.Domain.Materials
         public double MinimalCount { get; set; }
     }
     
-    public class MaterialEnvelope
+    public class MaterialsEnvelope : Envelope<List<Material>>
     {
-        public Material Material { get; set; }
-
-        public MaterialEnvelope(Material material)
+        public MaterialsEnvelope(List<Material> model, int totalCount) : base(model, totalCount)
         {
-            Material = material;
-        }
-    }
-    
-    public class MaterialsEnvelope
-    {
-        public List<Material> Materials { get; set; }
-
-        public MaterialsEnvelope(List<Material> materials)
-        {
-            Materials = materials;
         }
     }
 }

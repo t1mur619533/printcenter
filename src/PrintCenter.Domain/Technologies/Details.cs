@@ -5,22 +5,23 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PrintCenter.Data;
 using PrintCenter.Domain.Exceptions;
+using PrintCenter.Shared;
 
 namespace PrintCenter.Domain.Technologies
 {
     public class Details
     {
-        public class Query : IRequest<TechnologyEnvelope>
+        public class Query : IRequest<Technology>
         {
             public int Id { get; set; }
-            
+
             public Query(int id)
             {
                 Id = id;
             }
         }
-        
-        public class QueryHandler : IRequestHandler<Query, TechnologyEnvelope>
+
+        public class QueryHandler : IRequestHandler<Query, Technology>
         {
             private readonly DataContext context;
             private readonly IMapper mapper;
@@ -31,16 +32,17 @@ namespace PrintCenter.Domain.Technologies
                 this.mapper = mapper;
             }
 
-            public async Task<TechnologyEnvelope> Handle(Query message, CancellationToken cancellationToken)
+            public async Task<Technology> Handle(Query query, CancellationToken cancellationToken)
             {
-                var technology = await context.Technologies.FirstOrDefaultAsync(x => x.Id == message.Id, cancellationToken);
+                var technology =
+                    await context.Technologies.FirstOrDefaultAsync(x => x.Id == query.Id, cancellationToken);
 
                 if (technology == null)
                 {
-                    throw new NotFoundException<Technology>($"id {message.Id}");
+                    throw new NotFoundException<Technology>($"id {query.Id}");
                 }
-                
-                return new TechnologyEnvelope(mapper.Map<Technology>(technology));
+
+                return mapper.Map<Technology>(technology);
             }
         }
     }

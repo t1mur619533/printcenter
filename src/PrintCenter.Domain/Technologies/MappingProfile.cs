@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+using AutoMapper;
+using PrintCenter.Shared;
 
 namespace PrintCenter.Domain.Technologies
 {
@@ -6,10 +7,8 @@ namespace PrintCenter.Domain.Technologies
     {
         public MappingProfile()
         {
-            CreateMap<Create.TechnologyDto, Data.Models.Technology>(MemberList.None);
-            CreateMap<Edit.TechnologyDto, Data.Models.Technology>(MemberList.None);
-
             CreateMap<Data.Models.Technology, Technology>(MemberList.None);
+            CreateMap<Technology, Data.Models.Technology>(MemberList.None);
         }
     }
 }
