@@ -39,7 +39,7 @@ namespace PrintCenter.Domain.Users
             public CommandValidator()
             {
                 RuleFor(x => x.UserDto).NotNull();
-                RuleFor(x => x.UserDto.Name).NotNull().NotEmpty().Length(1,255);
+                RuleFor(x => x.UserDto.Name).NotNull().NotEmpty().Length(1, 255);
                 RuleFor(x => x.UserDto.Surname).NotNull().NotEmpty().Length(1, 255);
                 RuleFor(x => x.UserDto.Role).IsInEnum();
                 RuleFor(x => x.Login).NotNull().NotEmpty().Length(1, 255);
@@ -62,6 +62,7 @@ namespace PrintCenter.Domain.Users
                 var user = await context.Users
                     .Where(x => x.Login.Equals(command.Login))
                     .Include(u => u.UserTechnologies)
+                    .ThenInclude(ut => ut.Technology)
                     .FirstOrDefaultAsync(cancellationToken);
 
                 if (user == null)
@@ -78,13 +79,16 @@ namespace PrintCenter.Domain.Users
                     user.PasswordHash = hasher.HashPassword(user, command.UserDto.Password);
                 }
 
-                user.UserTechnologies.RemoveAll(technology => technology.UserId.Equals(user.Id));
+                var userTechNames = user.UserTechnologies.Select(ut => ut.Technology.Name).ToList();
+                var addedTechs = command.UserDto.TechnologiesNames.Except(userTechNames);
+                var removedTechs = userTechNames.Except(command.UserDto.TechnologiesNames);
 
-                foreach (var userDtoTechnologiesName in command.UserDto.TechnologiesNames)
+                user.UserTechnologies.RemoveAll(technology => removedTechs.Contains(technology.Technology.Name));
+
+                foreach (var tech in addedTechs)
                 {
                     var technology =
-                        await context.Technologies.SingleOrDefaultAsync(_ => _.Name.Equals(userDtoTechnologiesName),
-                            cancellationToken);
+                        await context.Technologies.SingleOrDefaultAsync(_ => _.Name.Equals(tech), cancellationToken);
                     if (technology != null)
                         user.UserTechnologies.Add(new UserTechnology {UserId = user.Id, TechnologyId = technology.Id});
                 }
