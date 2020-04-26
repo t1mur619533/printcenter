@@ -41,7 +41,7 @@ namespace PrintCenter.Domain.Customers
                     .AsNoTracking()
                     .ToListAsync(cancellationToken);
 
-                return new CustomersEnvelope(mapper.Map<List<Customer>>(customers));
+                return new CustomersEnvelope(mapper.Map<List<Customer>>(customers), context.Customers.Count());
             }
         }
     }

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -17,9 +19,12 @@ namespace PrintCenter.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<CustomersEnvelope> Get([FromQuery] int? limit, [FromQuery] int? offset)
+        public async Task<List<Customer>> Get([FromQuery] int limit, [FromQuery] int offset)
         {
-            return await mediator.Send(new List.Query(limit, offset));
+            var request = HttpContext.Request;
+            var result = await mediator.Send(new List.Query(limit, offset));
+            Response.Headers.Add("Content-Range", $"customers {offset}-{result.Customers.Count}/{result.Total}");
+            return result.Customers;
         }
         
         [HttpPost]
@@ -29,7 +34,7 @@ namespace PrintCenter.Api.Controllers
         }
         
         [HttpGet("{id}")]
-        public async Task<CustomerEnvelope> Get(int id)
+        public async Task<Customer> Get(int id)
         {
             return await mediator.Send(new Details.Query(id));
         }

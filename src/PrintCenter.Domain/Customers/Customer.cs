@@ -23,11 +23,14 @@ namespace PrintCenter.Domain.Customers
     
     public class CustomersEnvelope
     {
-        public List<Customer> Customers { get; set; }
+        public List<Customer> Customers { get; }
+        
+        public int Total { get; }
 
-        public CustomersEnvelope(List<Customer> customers)
+        public CustomersEnvelope(List<Customer> customers, int total)
         {
             Customers = customers;
+            Total = total;
         }
     }
 }

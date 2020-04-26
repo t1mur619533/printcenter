@@ -10,7 +10,7 @@ namespace PrintCenter.Domain.Customers
 {
     public class Details
     {
-        public class Query : IRequest<CustomerEnvelope>
+        public class Query : IRequest<Customer>
         {
             public int Id { get; set; }
             
@@ -20,7 +20,7 @@ namespace PrintCenter.Domain.Customers
             }
         }
         
-        public class QueryHandler : IRequestHandler<Query, CustomerEnvelope>
+        public class QueryHandler : IRequestHandler<Query, Customer>
         {
             private readonly DataContext context;
             private readonly IMapper mapper;
@@ -31,7 +31,7 @@ namespace PrintCenter.Domain.Customers
                 this.mapper = mapper;
             }
 
-            public async Task<CustomerEnvelope> Handle(Query message, CancellationToken cancellationToken)
+            public async Task<Customer> Handle(Query message, CancellationToken cancellationToken)
             {
                 var customer = await context.Customers.FirstOrDefaultAsync(x => x.Id == message.Id, cancellationToken);
 
@@ -40,7 +40,7 @@ namespace PrintCenter.Domain.Customers
                     throw new NotFoundException<Customer>($"id {message.Id}");
                 }
                 
-                return new CustomerEnvelope(mapper.Map<Customer>(customer));
+                return mapper.Map<Customer>(customer);
             }
         }
     }
