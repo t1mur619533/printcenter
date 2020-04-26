@@ -1,6 +1,5 @@
 import { fetchUtils } from 'react-admin';
 import { stringify } from 'query-string';
-import axios from 'axios';
 
 const apiUrl = 'https://localhost:5001/api';
 const httpClient = fetchUtils.fetchJson;
@@ -14,23 +13,9 @@ export default {
         };
         const url = `${apiUrl}/${resource}?${stringify(query)}`;
 
-        //https://jsonplaceholder.typicode.com/users
-        //https://localhost:5001/api/customers?limit=10&offset=0
-        axios.get('https://localhost:5001/api/customers?limit=10&offset=0')
-            .then(response => {
-                console.log(response.data);
-                console.log(response.status);
-                console.log(response.statusText);
-                console.log(response.headers);
-                console.log(response.config);
-            })
-            .catch(error => {
-                console.log(error);
-            });
-        //parseInt(headers.get('content-range').split('/').pop(), 10)
         return httpClient(url).then(({ headers, json }) => ({
                 data: json,
-                total: 10,
+                total: parseInt(headers.get('content-range').split('/').pop(), 10),
         }));
     },
 

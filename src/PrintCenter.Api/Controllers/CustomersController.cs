@@ -21,7 +21,6 @@ namespace PrintCenter.Api.Controllers
         [HttpGet]
         public async Task<List<Customer>> Get([FromQuery] int limit, [FromQuery] int offset)
         {
-            var request = HttpContext.Request;
             var result = await mediator.Send(new List.Query(limit, offset));
             Response.Headers.Add("Content-Range", $"customers {offset}-{result.Customers.Count}/{result.Total}");
             return result.Customers;
