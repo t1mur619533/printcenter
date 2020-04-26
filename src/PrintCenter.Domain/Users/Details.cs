@@ -12,7 +12,7 @@ namespace PrintCenter.Domain.Users
 {
     public class Details
     {
-        public class Query : IRequest<User>
+        public class Query : IRequest<UserDetail>
         {
             public string Login { get; set; }
 
@@ -30,7 +30,7 @@ namespace PrintCenter.Domain.Users
             }
         }
 
-        public class QueryHandler : IRequestHandler<Query, User>
+        public class QueryHandler : IRequestHandler<Query, UserDetail>
         {
             private readonly DataContext context;
             private readonly IMapper mapper;
@@ -41,7 +41,7 @@ namespace PrintCenter.Domain.Users
                 this.mapper = mapper;
             }
 
-            public async Task<User> Handle(Query query, CancellationToken cancellationToken)
+            public async Task<UserDetail> Handle(Query query, CancellationToken cancellationToken)
             {
                 var user = await context.Users
                     .Include(u => u.UserTechnologies)
@@ -54,7 +54,7 @@ namespace PrintCenter.Domain.Users
                     throw new NotFoundException<User>(query.Login);
                 }
 
-                return mapper.Map<User>(user);
+                return mapper.Map<UserDetail>(user);
             }
         }
     }

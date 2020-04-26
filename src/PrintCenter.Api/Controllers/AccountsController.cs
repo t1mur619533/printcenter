@@ -31,7 +31,7 @@ namespace PrintCenter.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<User> Get()
+        public async Task<UserDetail> Get()
         {
             return await mediator.Send(new Details.Query(currentUserAccessor.GetUsername()));
         }

@@ -48,9 +48,7 @@ namespace PrintCenter.Domain.Users
                 }
 
                 context.Users.Remove(user);
-
                 await context.SaveChangesAsync(cancellationToken);
-                
                 return Unit.Value;
             }
         }

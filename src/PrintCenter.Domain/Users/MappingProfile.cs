@@ -8,7 +8,8 @@ namespace PrintCenter.Domain.Users
         public MappingProfile()
         {
             CreateMap<Data.Models.User, User>(MemberList.None);
-            CreateMap<Data.Models.User, User>(MemberList.None);
+            CreateMap<Data.Models.User, UserDetail>(MemberList.None)
+                .ForMember(detail => detail.Technologies, cfg => cfg.MapFrom(user => user.Technologies));
         }
     }
 }

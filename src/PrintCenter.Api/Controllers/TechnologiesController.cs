@@ -30,15 +30,15 @@ namespace PrintCenter.Api.Controllers
         }
 
         [HttpPost]
-        public async Task Create([FromBody]Create.Command command)
+        public async Task Create([FromBody] Technology technology)
         {
-            await mediator.Send(command);
+            await mediator.Send(new Create.Command(technology));
         }
         
         [HttpPut("{id}")]
-        public async Task Edit(int id, [FromBody]Edit.Command command)
+        public async Task Edit(int id, [FromBody] Technology technology)
         {
-            command.Technology.Id = id;
+            var command = new Edit.Command(technology) {Technology = {Id = id}};
             await mediator.Send(command);
         }
         
