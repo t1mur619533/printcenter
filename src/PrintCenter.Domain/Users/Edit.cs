@@ -14,8 +14,10 @@ namespace PrintCenter.Domain.Users
 {
     public class Edit
     {
-        public class UserDto
+        public class Command : IRequest
         {
+            public string Login { get; set; }
+
             public string Password { get; set; }
 
             public string Surname { get; set; }
@@ -27,21 +29,13 @@ namespace PrintCenter.Domain.Users
             public List<string> TechnologiesNames { get; set; }
         }
 
-        public class Command : IRequest
-        {
-            public string Login { get; set; }
-
-            public UserDto UserDto { get; set; }
-        }
-
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
-                RuleFor(x => x.UserDto).NotNull();
-                RuleFor(x => x.UserDto.Name).NotNull().NotEmpty().Length(1, 255);
-                RuleFor(x => x.UserDto.Surname).NotNull().NotEmpty().Length(1, 255);
-                RuleFor(x => x.UserDto.Role).IsInEnum();
+                RuleFor(x => x.Name).NotNull().NotEmpty().Length(1, 255);
+                RuleFor(x => x.Surname).NotNull().NotEmpty().Length(1, 255);
+                RuleFor(x => x.Role).IsInEnum();
                 RuleFor(x => x.Login).NotNull().NotEmpty().Length(1, 255);
             }
         }
@@ -70,28 +64,28 @@ namespace PrintCenter.Domain.Users
                     throw new NotFoundException<User>(command.Login);
                 }
 
-                user.Name = command.UserDto.Name ?? user.Name;
-                user.Surname = command.UserDto.Surname ?? user.Surname;
-                user.Role = command.UserDto.Role ?? user.Role;
+                user.Name = command.Name ?? user.Name;
+                user.Surname = command.Surname ?? user.Surname;
+                user.Role = command.Role ?? user.Role;
 
-                if (!string.IsNullOrWhiteSpace(command.UserDto.Password))
+                if (!string.IsNullOrWhiteSpace(command.Password))
                 {
-                    user.PasswordHash = hasher.HashPassword(user, command.UserDto.Password);
+                    user.PasswordHash = hasher.HashPassword(user, command.Password);
                 }
 
                 var userTechNames = user.UserTechnologies.Select(ut => ut.Technology.Name).ToList();
-                var addedTechs = command.UserDto.TechnologiesNames.Except(userTechNames);
-                var removedTechs = userTechNames.Except(command.UserDto.TechnologiesNames);
+                var addedTechsNames = command.TechnologiesNames.Except(userTechNames);
+                var removedTechNames = userTechNames.Except(command.TechnologiesNames);
 
-                user.UserTechnologies.RemoveAll(technology => removedTechs.Contains(technology.Technology.Name));
+                user.UserTechnologies.RemoveAll(technology => removedTechNames.Contains(technology.Technology.Name));
 
-                foreach (var tech in addedTechs)
-                {
-                    var technology =
-                        await context.Technologies.SingleOrDefaultAsync(_ => _.Name.Equals(tech), cancellationToken);
-                    if (technology != null)
-                        user.UserTechnologies.Add(new UserTechnology {UserId = user.Id, TechnologyId = technology.Id});
-                }
+                var addedTechs = await context.Technologies
+                    .Where(t => addedTechsNames.Contains(t.Name))
+                    .Select(t => t.Id)
+                    .ToListAsync(cancellationToken);
+
+                addedTechs.ForEach(technologyId =>
+                    user.UserTechnologies.Add(new UserTechnology {UserId = user.Id, TechnologyId = technologyId}));
 
                 await context.SaveChangesAsync(cancellationToken);
 
