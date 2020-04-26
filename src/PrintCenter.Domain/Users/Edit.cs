@@ -52,6 +52,7 @@ namespace PrintCenter.Domain.Users
                 var user = await context.Users
                     .Where(x => x.Login.Equals(command.User.Login))
                     .Include(u => u.UserTechnologies)
+                    .ThenInclude(ut => ut.Technology)
                     .FirstOrDefaultAsync(cancellationToken);
 
                 if (user == null)
@@ -68,18 +69,22 @@ namespace PrintCenter.Domain.Users
                     user.PasswordHash = hasher.HashPassword(user, command.User.Password);
                 }
 
-                user.UserTechnologies.RemoveAll(technology => technology.UserId.Equals(user.Id));
-
                 if (command.User.TechnologyNames != null)
-                    foreach (var technologyName in command.User.TechnologyNames)
-                    {
-                        var technology =
-                            await context.Technologies.SingleOrDefaultAsync(_ => _.Name.Equals(technologyName),
-                                cancellationToken);
-                        if (technology != null)
-                            user.UserTechnologies.Add(new UserTechnology
-                                {UserId = user.Id, TechnologyId = technology.Id});
-                    }
+                {
+                    var userTechNames = user.UserTechnologies.Select(ut => ut.Technology.Name).ToList();
+                    var addedTechsNames = command.User.TechnologyNames.Except(userTechNames);
+                    var removedTechNames = userTechNames.Except(command.User.TechnologyNames);
+
+                    user.UserTechnologies.RemoveAll(technology => removedTechNames.Contains(technology.Technology.Name));
+
+                    var addedTechs = await context.Technologies
+                        .Where(t => addedTechsNames.Contains(t.Name))
+                        .Select(t => t.Id)
+                        .ToListAsync(cancellationToken);
+
+                    addedTechs.ForEach(technologyId =>
+                        user.UserTechnologies.Add(new UserTechnology {UserId = user.Id, TechnologyId = technologyId}));
+                }
 
                 await context.SaveChangesAsync(cancellationToken);
                 return Unit.Value;
