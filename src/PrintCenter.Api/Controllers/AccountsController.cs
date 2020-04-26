@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using PrintCenter.Domain.Accounts;
 using PrintCenter.Domain.Users;
 using PrintCenter.Infrastructure.Accessors;
+using PrintCenter.Shared;
 
 namespace PrintCenter.Api.Controllers
 {
@@ -24,22 +25,21 @@ namespace PrintCenter.Api.Controllers
 
         [HttpPost("Login")]
         [AllowAnonymous]
-        public async Task<AccountEnvelope> Post([FromBody] Login.Command command)
+        public async Task<Account> Post([FromBody] LoginData loginData)
         {
-            return await mediator.Send(command);
+            return await mediator.Send(new Login.Command(loginData));
         }
 
         [HttpGet]
-        public async Task<UserEnvelope> Get()
+        public async Task<User> Get()
         {
             return await mediator.Send(new Details.Query(currentUserAccessor.GetUsername()));
         }
 
         [HttpPut]
-        public async Task Put([FromBody] EditPassword.Command command)
+        public async Task Put([FromBody] EditPasswordData editPasswordData)
         {
-            command.Login = currentUserAccessor.GetUsername();
-            await mediator.Send(command);
+            await mediator.Send(new EditPassword.Command(currentUserAccessor.GetUsername(), editPasswordData));
         }
     }
 }

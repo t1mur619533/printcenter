@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Extensions;
 using PrintCenter.Data.Models;
 using PrintCenter.Domain.Users;
+using PrintCenter.Shared;
+using User = PrintCenter.Shared.User;
 
 namespace PrintCenter.Api.Controllers
 {
@@ -39,14 +41,14 @@ namespace PrintCenter.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<UsersEnvelope> Get([FromQuery] int? limit, [FromQuery] int? offset)
+        public async Task<UsersEnvelope> Get([FromQuery] int limit, [FromQuery] int offset)
         {
             return await mediator.Send(new List.Query(limit, offset));
         }
 
 
         [HttpGet("{login}")]
-        public async Task<UserEnvelope> Get(string login)
+        public async Task<User> Get(string login)
         {
             return await mediator.Send(new Details.Query(login));
         }

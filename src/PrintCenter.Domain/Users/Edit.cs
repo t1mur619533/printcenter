@@ -49,9 +49,9 @@ namespace PrintCenter.Domain.Users
         public class Handler : IRequestHandler<Command>
         {
             private readonly DataContext context;
-            private readonly IPasswordHasher<Data.Models.User> hasher;
+            private readonly IPasswordHasher<User> hasher;
 
-            public Handler(DataContext context, IPasswordHasher<Data.Models.User> hasher)
+            public Handler(DataContext context, IPasswordHasher<User> hasher)
             {
                 this.context = context;
                 this.hasher = hasher;

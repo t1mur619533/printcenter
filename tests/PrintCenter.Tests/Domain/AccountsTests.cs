@@ -5,11 +5,12 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using PrintCenter.Data;
-using PrintCenter.Data.Models;
 using PrintCenter.Domain.Accounts;
 using PrintCenter.Domain.Exceptions;
+using PrintCenter.Shared;
 using PrintCenter.Tests.Helpers;
 using Xunit;
+using User = PrintCenter.Data.Models.User;
 
 namespace PrintCenter.Tests.Domain
 {
@@ -42,12 +43,11 @@ namespace PrintCenter.Tests.Domain
                 });
                 await context.SaveChangesAsync();
 
-                var command = new EditPassword.Command()
+                var command = new EditPassword.Command(name, new EditPasswordData()
                 {
                     OldPassword = passOld,
                     NewPassword = passNew,
-                    Login = name
-                };
+                });
 
                 // Act
                 var result = await mediator.Send(command);
@@ -81,12 +81,11 @@ namespace PrintCenter.Tests.Domain
                 });
                 await context.SaveChangesAsync();
 
-                var command = new EditPassword.Command()
+                var command = new EditPassword.Command(name, new EditPasswordData()
                 {
-                    OldPassword = passOld, 
+                    OldPassword = passOld,
                     NewPassword = passNew,
-                    Login = name
-                };
+                });
 
                 // Act
                 var result = await Assert.ThrowsAnyAsync<Exception>(async () => { await mediator.Send(command); });
@@ -108,12 +107,11 @@ namespace PrintCenter.Tests.Domain
                 var provider = scope.ServiceProvider;
                 var mediator = provider.GetRequiredService<IMediator>();
 
-                var command = new EditPassword.Command()
+                var command = new EditPassword.Command(name, new EditPasswordData()
                 {
-                    OldPassword = passOld, 
+                    OldPassword = passOld,
                     NewPassword = passNew,
-                    Login = name
-                };
+                });
 
                 // Act
                 var result = await Assert.ThrowsAnyAsync<Exception>(async () => { await mediator.Send(command); });
@@ -143,12 +141,11 @@ namespace PrintCenter.Tests.Domain
                 });
                 await context.SaveChangesAsync();
 
-                var command = new EditPassword.Command()
+                var command = new EditPassword.Command(name, new EditPasswordData()
                 {
                     OldPassword = passOld,
                     NewPassword = passNew,
-                    Login = name
-                };
+                });
 
                 // Act
                 var result = await Assert.ThrowsAnyAsync<Exception>(async () => { await mediator.Send(command); });

@@ -42,10 +42,10 @@ namespace PrintCenter.Domain.Users
         public class CommandHandler : IRequestHandler<Command, User>
         {
             private readonly DataContext context;
-            private readonly IPasswordHasher<Data.Models.User> hasher;
+            private readonly IPasswordHasher<User> hasher;
             private readonly IMapper mapper;
 
-            public CommandHandler(DataContext context, IMapper mapper, IPasswordHasher<Data.Models.User> hasher)
+            public CommandHandler(DataContext context, IMapper mapper, IPasswordHasher<User> hasher)
             {
                 this.context = context;
                 this.mapper = mapper;
@@ -59,7 +59,7 @@ namespace PrintCenter.Domain.Users
                     throw new DuplicateException<User>(command.Login);
                 }
 
-                var user = mapper.Map<Data.Models.User>(command);
+                var user = mapper.Map<User>(command);
                 user.PasswordHash = hasher.HashPassword(user, command.Password);
                 await context.Users.AddAsync(user, cancellationToken);
                 await context.SaveChangesAsync(cancellationToken);

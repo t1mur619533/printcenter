@@ -37,7 +37,7 @@ namespace PrintCenter.Tests.Helpers
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddMediatR();
             services.AddAutoMapper();
-            services.AddValidatorsFromAssemblyContaining(typeof(User));
+            services.AddValidatorsFromAssemblyContaining(typeof(Edit.UserDto));
             ServiceProvider = services.BuildServiceProvider();
         }
     }

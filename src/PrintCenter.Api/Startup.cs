@@ -49,7 +49,7 @@ namespace PrintCenter.Api
             services
                 .AddControllers(opt => { opt.Filters.Add(typeof(ValidatorActionFilter)); })
                 .AddJsonOptions(opt => { opt.JsonSerializerOptions.IgnoreNullValues = true; })
-                .AddFluentValidation(cfg => { cfg.RegisterValidatorsFromAssemblyContaining<Domain.Users.User>(); });
+                .AddFluentValidation(cfg => { cfg.RegisterValidatorsFromAssemblyContaining<Domain.Users.Create>(); });
             services.AddSwagger();
             services.AddJwtAuthentication(Configuration, environment);
             services.AddAuthorization();
