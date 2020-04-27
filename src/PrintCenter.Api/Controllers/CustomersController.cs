@@ -21,8 +21,6 @@ namespace PrintCenter.Api.Controllers
             this.mediator = mediator;
         }
 
-        //https://localhost:5001/api/customers?filter={}&range=[0,9]&sort=["id","ASC"]
-        //{ pagination: { page: {int} , perPage: {int} }, sort: { field: {string}, order: {string} }, filter: {Object} }
         [HttpGet]
         public async Task<List<Customer>> Get(
             [FromQuery] string sortField,
