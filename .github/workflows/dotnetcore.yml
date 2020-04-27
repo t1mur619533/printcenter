@@ -12,6 +12,8 @@ jobs:
         dotnet-version: 3.1.101
     - name: Install dependencies
       run: dotnet restore PrintCenter.sln
+    - name: Install webassembly preview3
+      run: dotnet new -i Microsoft.AspNetCore.Components.WebAssembly.Templates::3.2.0-preview3.20168.3
     - name: Build
       run: dotnet build PrintCenter.sln --configuration Release --no-restore
     - name: Test
