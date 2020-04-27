@@ -7,40 +7,28 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PrintCenter.Data;
 using PrintCenter.Domain.Exceptions;
+using PrintCenter.Shared;
 
 namespace PrintCenter.Domain.Customers
 {
     public class Create
     {
-        public class CustomerDto
+        public class Command : IRequest<int>
         {
             public string Name { get; set; }
 
             public string Description { get; set; }
         }
         
-        public class UserDtoValidator : AbstractValidator<CustomerDto>
+        public class CommandValidator : AbstractValidator<Command>
         {
-            public UserDtoValidator()
+            public CommandValidator()
             {
                 RuleFor(x => x.Name).NotNull().NotEmpty();
             }
         }
         
-        public class Command : IRequest
-        {
-            public CustomerDto CustomerDto { get; set; }
-        }
-        
-        public class CommandValidator : AbstractValidator<Command>
-        {
-            public CommandValidator()
-            {
-                RuleFor(x => x.CustomerDto).NotNull().SetValidator(new UserDtoValidator());
-            }
-        }
-        
-        public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command, int>
         {
             private readonly IDataContext context;
             private readonly IMapper mapper;
@@ -51,21 +39,21 @@ namespace PrintCenter.Domain.Customers
                 this.mapper = mapper;
             }
 
-            public async Task<Unit> Handle(Command command, CancellationToken cancellationToken)
+            public async Task<int> Handle(Command command, CancellationToken cancellationToken)
             {
-                if (await context.DbSet<Data.Models.Customer>().Where(x => x.Name == command.CustomerDto.Name)
+                if (await context.DbSet<Data.Models.Customer>().Where(x => x.Name == command.Name)
                     .AnyAsync(cancellationToken))
                 {
-                    throw new DuplicateException<Customer>(command.CustomerDto.Name);
+                    throw new DuplicateException<Customer>(command.Name);
                 }
 
-                var customer = mapper.Map<Data.Models.Customer>(command.CustomerDto);
+                var customer = mapper.Map<Data.Models.Customer>(command);
 
                 await context.DbSet<Data.Models.Customer>().AddAsync(customer, cancellationToken);
 
                 await context.SaveChangesAsync(cancellationToken);
 
-                return Unit.Value;
+                return customer.Id;
             }
         }
     }
