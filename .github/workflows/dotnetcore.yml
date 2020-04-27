@@ -9,7 +9,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.100
+        dotnet-version: 3.1.101
     - name: Install dependencies
       run: dotnet restore PrintCenter.sln
     - name: Build
