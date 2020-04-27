@@ -14,7 +14,7 @@ namespace PrintCenter.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = nameof(Role.SuperAdmin))]
+    //[Authorize(Roles = nameof(Role.SuperAdmin))]
     public class UsersController : ControllerBase
     {
         private readonly IMediator mediator;

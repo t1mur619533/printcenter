@@ -70,13 +70,17 @@ namespace PrintCenter.Api
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
 
-            app.UseCors();
-
             app.UseConfiguredSwagger();
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(builder =>
+                builder
+                    .AllowAnyMethod()
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader());
 
             app.UseAuthentication();
 
