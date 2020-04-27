@@ -7,6 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Connections.Features;
 using Microsoft.EntityFrameworkCore;
 using PrintCenter.Data;
+using PrintCenter.Shared;
 
 namespace PrintCenter.Domain.Customers
 {

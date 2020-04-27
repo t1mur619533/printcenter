@@ -7,6 +7,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PrintCenter.Data;
 using PrintCenter.Domain.Exceptions;
+using PrintCenter.Shared;
 
 namespace PrintCenter.Domain.Customers
 {

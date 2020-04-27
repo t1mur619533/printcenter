@@ -6,6 +6,7 @@ using JetBrains.Annotations;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PrintCenter.Domain.Customers;
+using PrintCenter.Shared;
 
 namespace PrintCenter.Api.Controllers
 {
@@ -32,14 +33,14 @@ namespace PrintCenter.Api.Controllers
             [FromQuery] int perPage)
         {
             var result = await mediator.Send(new List.Query(sortField, order, filter, searchString, page, perPage));
-            Response.Headers.Add("Content-Range", $"customers {0}-{result.Customers.Count}/{result.Total}");
-            return result.Customers;
+            Response.Headers.Add("Content-Range", $"customers {0}-{result.Model.Count}/{result.TotalCount}");
+            return result.Model;
         }
         
         [HttpPost]
-        public async Task Create([FromBody]Create.Command command)
+        public async Task<int> Create([FromBody]Create.Command command)
         {
-            await mediator.Send(command);
+            return await mediator.Send(command);
         }
         
         [HttpGet("{id}")]
