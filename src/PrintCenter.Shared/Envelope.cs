@@ -6,7 +6,7 @@ namespace PrintCenter.Shared
 
         public int TotalCount { get; set; }
 
-        private Envelope()
+        public Envelope()
         {
         }
 

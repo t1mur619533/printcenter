@@ -11,7 +11,7 @@ namespace PrintCenter.Domain.Exceptions
 
     public class NotFoundException<T> : NotFoundException
     {
-        public NotFoundException(string name) : base($"{nameof(T)} '{name}' not found.")
+        public NotFoundException(string name) : base($"{typeof(T).Name} '{name}' not found.")
         {
         }
     }

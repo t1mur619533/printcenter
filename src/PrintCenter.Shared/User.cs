@@ -37,6 +37,9 @@ namespace PrintCenter.Shared
 
     public class UsersEnvelope : Envelope<List<UserDetail>>
     {
+        public UsersEnvelope()
+        {
+        }
         public UsersEnvelope(List<UserDetail> model, int totalCount) : base(model, totalCount)
         {
         }
