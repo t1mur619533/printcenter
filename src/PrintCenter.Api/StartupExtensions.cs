@@ -82,8 +82,7 @@ namespace PrintCenter.Api
 
         public static IServiceCollection AddAutoMapper(this IServiceCollection services)
         {
-            services.AddAutoMapper(Assembly.GetExecutingAssembly(), Assembly.GetAssembly(typeof(UsersEnvelope)),
-                Assembly.GetAssembly(typeof(User)));
+            services.AddAutoMapper(Assembly.GetExecutingAssembly(), Assembly.GetAssembly(typeof(Shared.User)), Assembly.GetAssembly(typeof(User)), Assembly.GetAssembly(typeof(Create)));
             return services;
         }
 
