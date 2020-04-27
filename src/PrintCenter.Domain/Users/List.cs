@@ -7,6 +7,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PrintCenter.Data;
+using PrintCenter.Shared;
 
 namespace PrintCenter.Domain.Users
 {
@@ -14,7 +15,7 @@ namespace PrintCenter.Domain.Users
     {
         public class Query : IRequest<UsersEnvelope>
         {
-            public Query(int? limit, int? offset)
+            public Query(int limit, int offset)
             {
                 Limit = limit;
                 Offset = offset;
@@ -54,8 +55,9 @@ namespace PrintCenter.Domain.Users
                     .Take(query.Limit ?? 20)
                     .AsNoTracking()
                     .ToListAsync(cancellationToken);
+                var count = context.Tickets.AsNoTracking().Count();
 
-                return new UsersEnvelope(mapper.Map<List<UserEnvelope>>(users));
+                return new UsersEnvelope(mapper.Map<List<UserDetail>>(users), count);
             }
         }
     }

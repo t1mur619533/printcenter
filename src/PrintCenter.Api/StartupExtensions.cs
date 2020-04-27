@@ -22,6 +22,7 @@ using PrintCenter.Data.Models;
 using PrintCenter.Domain.Infrastructure;
 using PrintCenter.Domain.Users;
 using PrintCenter.Infrastructure.Security;
+using PrintCenter.Shared;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
@@ -73,7 +74,7 @@ namespace PrintCenter.Api
 
         public static IServiceCollection AddMediatR(this IServiceCollection services)
         {
-            services.AddMediatR(Assembly.GetAssembly(typeof(UsersEnvelope)));
+            services.AddMediatR(Assembly.GetAssembly(typeof(Create)));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(TransactionPipelineBehavior<,>));
             return services;

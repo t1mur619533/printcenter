@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PrintCenter.Domain.Tickets;
 using PrintCenter.Infrastructure.Accessors;
+using PrintCenter.Shared;
 
 namespace PrintCenter.Api.Controllers
 {

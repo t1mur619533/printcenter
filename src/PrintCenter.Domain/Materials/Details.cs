@@ -5,22 +5,23 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PrintCenter.Data;
 using PrintCenter.Domain.Exceptions;
+using PrintCenter.Shared;
 
 namespace PrintCenter.Domain.Materials
 {
     public class Details
     {
-        public class Query : IRequest<MaterialEnvelope>
+        public class Query : IRequest<Material>
         {
             public int Id { get; set; }
-            
+
             public Query(int id)
             {
                 Id = id;
             }
         }
-        
-        public class QueryHandler : IRequestHandler<Query, MaterialEnvelope>
+
+        public class QueryHandler : IRequestHandler<Query, Material>
         {
             private readonly DataContext context;
             private readonly IMapper mapper;
@@ -31,16 +32,17 @@ namespace PrintCenter.Domain.Materials
                 this.mapper = mapper;
             }
 
-            public async Task<MaterialEnvelope> Handle(Query message, CancellationToken cancellationToken)
+            public async Task<Material> Handle(Query query, CancellationToken cancellationToken)
             {
-                var material = await context.Materials.FirstOrDefaultAsync(x => x.Id == message.Id, cancellationToken);
+                var material =
+                    await context.Materials.FirstOrDefaultAsync(x => x.Id.Equals(query.Id), cancellationToken);
 
                 if (material == null)
                 {
-                    throw new NotFoundException<Material>($"id {message.Id}");
+                    throw new NotFoundException<Material>($"id {query.Id}");
                 }
-                
-                return new MaterialEnvelope(mapper.Map<Material>(material));
+
+                return mapper.Map<Material>(material);
             }
         }
     }
