@@ -6,7 +6,7 @@ networks:
 
 services:
   api:
-    container_name: printcenterapi_container
+    container_name: api
     image: ${DOCKER_REGISTRY-}printcenterapi
     depends_on:
       - "postgres"
@@ -17,7 +17,7 @@ services:
       - printcenter-dev
       
   postgres:
-    container_name: postgres_container
+    container_name: postgres
     image: postgres
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-printcenter}
@@ -33,7 +33,7 @@ services:
     restart: unless-stopped
   
   pgadmin:
-    container_name: pgadmin_container
+    container_name: pgadmin
     image: dpage/pgadmin4
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-printcenter@pgadmin.org}
@@ -47,7 +47,7 @@ services:
     restart: unless-stopped
 
   web:
-    container_name: printcenterserver_container
+    container_name: web
     image: ${DOCKER_REGISTRY-}printcenterwebserver
     depends_on:
       - "postgres"

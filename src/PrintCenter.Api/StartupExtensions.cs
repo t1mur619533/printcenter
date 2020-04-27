@@ -22,7 +22,6 @@ using PrintCenter.Data.Models;
 using PrintCenter.Domain.Infrastructure;
 using PrintCenter.Domain.Users;
 using PrintCenter.Infrastructure.Security;
-using PrintCenter.Shared;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
