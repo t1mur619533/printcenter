@@ -11,6 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrintCenter.Data", "src\Pri
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{2CC239C4-3C30-4634-A179-CC825021C13A}"
 	ProjectSection(SolutionItems) = preProject
+		.github\workflows\dotnetcore.yml = .github\workflows\dotnetcore.yml
 		NuGet.Config = NuGet.Config
 	EndProjectSection
 EndProject
