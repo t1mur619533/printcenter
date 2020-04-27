@@ -7,7 +7,7 @@ import {CustomerList} from "./customers";
 import dataProvider from './dataProvider';
 
 const App = () => (
-    <Admin dashboard={Dashboard} authProvider={authProvider} dataProvider={dataProvider}>
+    <Admin title="Принт Центер" dashboard={Dashboard} authProvider={authProvider} dataProvider={dataProvider}>
       <Resource name="customers" list={CustomerList} />
     </Admin>
 );

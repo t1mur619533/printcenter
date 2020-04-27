@@ -6,16 +6,32 @@ const httpClient = fetchUtils.fetchJson;
 
 export default {
     getList: (resource, params) => {
+        // const { page, perPage } = params.pagination;
+        // const query = {
+        //     limit: perPage,
+        //     offset: perPage * (page - 1)
+        // };
+        // const url = `${apiUrl}/${resource}?${stringify(query)}`;
+        //
+        // return httpClient(url).then(({ headers, json }) => ({
+        //         data: json,
+        //         total: parseInt(headers.get('content-range').split('/').pop(), 10),
+        // }));
+
         const { page, perPage } = params.pagination;
+        const { field, order } = params.sort;
         const query = {
-            limit: perPage,
-            offset: perPage * (page - 1)
+            sortField: field,
+            order: order,
+            page: page,
+            perPage: perPage,
+            filter: JSON.stringify(params.filter),
         };
         const url = `${apiUrl}/${resource}?${stringify(query)}`;
 
         return httpClient(url).then(({ headers, json }) => ({
-                data: json,
-                total: parseInt(headers.get('content-range').split('/').pop(), 10),
+            data: json,
+            total: parseInt(headers.get('content-range').split('/').pop(), 10),
         }));
     },
 

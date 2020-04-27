@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PrintCenter.Domain.Customers;
@@ -18,11 +20,19 @@ namespace PrintCenter.Api.Controllers
             this.mediator = mediator;
         }
 
+        //https://localhost:5001/api/customers?filter={}&range=[0,9]&sort=["id","ASC"]
+        //{ pagination: { page: {int} , perPage: {int} }, sort: { field: {string}, order: {string} }, filter: {Object} }
         [HttpGet]
-        public async Task<List<Customer>> Get([FromQuery] int limit, [FromQuery] int offset)
+        public async Task<List<Customer>> Get(
+            [FromQuery] string sortField,
+            [FromQuery] string order,
+            [FromQuery] string filter, 
+            [FromQuery] string searchString, 
+            [FromQuery] int page,
+            [FromQuery] int perPage)
         {
-            var result = await mediator.Send(new List.Query(limit, offset));
-            Response.Headers.Add("Content-Range", $"customers {offset}-{result.Customers.Count}/{result.Total}");
+            var result = await mediator.Send(new List.Query(sortField, order, filter, searchString, page, perPage));
+            Response.Headers.Add("Content-Range", $"customers {0}-{result.Customers.Count}/{result.Total}");
             return result.Customers;
         }
         
@@ -51,4 +61,5 @@ namespace PrintCenter.Api.Controllers
             await mediator.Send(new Delete.Command(id));
         }
     }
+    
 }
