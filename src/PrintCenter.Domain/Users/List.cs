@@ -55,7 +55,7 @@ namespace PrintCenter.Domain.Users
                     .Take(query.Limit ?? 20)
                     .AsNoTracking()
                     .ToListAsync(cancellationToken);
-                var count = context.Tickets.AsNoTracking().Count();
+                var count = context.Users.AsNoTracking().Count();
 
                 return new UsersEnvelope(mapper.Map<List<UserDetail>>(users), count);
             }
