@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace PrintCenter.Shared
 {
     public class Customer
@@ -9,9 +11,9 @@ namespace PrintCenter.Shared
         public string Description { get; set; }
     }
 
-    public class CustomersEnvelope : Envelope<Customer>
+    public class CustomersEnvelope : Envelope<List<Customer>>
     {
-        public CustomersEnvelope(Customer model, int totalCount) : base(model, totalCount)
+        public CustomersEnvelope(List<Customer> model, int totalCount) : base(model, totalCount)
         {
         }
     }
