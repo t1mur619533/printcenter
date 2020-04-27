@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PrintCenter.Data;
 using PrintCenter.Domain.Exceptions;
+using PrintCenter.Shared;
 
 namespace PrintCenter.Domain.Materials
 {
@@ -18,7 +19,7 @@ namespace PrintCenter.Domain.Materials
 
             public int Id { get; set; }
         }
-        
+
         public class QueryHandler : IRequestHandler<Command>
         {
             private readonly DataContext context;
@@ -30,7 +31,8 @@ namespace PrintCenter.Domain.Materials
 
             public async Task<Unit> Handle(Command command, CancellationToken cancellationToken)
             {
-                var material = await context.Materials.FirstOrDefaultAsync(x => x.Id == command.Id, cancellationToken);
+                var material =
+                    await context.Materials.FirstOrDefaultAsync(x => x.Id.Equals(command.Id), cancellationToken);
 
                 if (material == null)
                 {
@@ -38,9 +40,7 @@ namespace PrintCenter.Domain.Materials
                 }
 
                 context.Materials.Remove(material);
-
                 await context.SaveChangesAsync(cancellationToken);
-                
                 return Unit.Value;
             }
         }

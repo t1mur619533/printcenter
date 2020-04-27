@@ -8,17 +8,17 @@ using PrintCenter.Data;
 using PrintCenter.Domain.Exceptions;
 using PrintCenter.Shared;
 
-namespace PrintCenter.Domain.Technologies
+namespace PrintCenter.Domain.Streams
 {
     public class Edit
     {
         public class Command : IRequest<Unit>
         {
-            public Technology Technology { get; set; }
+            public Stream Stream { get; set; }
 
-            public Command(Technology technology)
+            public Command(Stream stream)
             {
-                Technology = technology;
+                Stream = stream;
             }
         }
 
@@ -26,9 +26,9 @@ namespace PrintCenter.Domain.Technologies
         {
             public CommandValidator()
             {
-                RuleFor(x => x.Technology).NotNull();
-                RuleFor(x => x.Technology.Name).NotNull().NotEmpty();
-                RuleFor(x => x.Technology.Unit).NotNull().NotEmpty();
+                RuleFor(x => x.Stream).NotNull().NotEmpty();
+                RuleFor(x => x.Stream.Code).NotNull().NotEmpty();
+                RuleFor(x => x.Stream.Name).NotNull().NotEmpty();
             }
         }
 
@@ -45,15 +45,16 @@ namespace PrintCenter.Domain.Technologies
 
             public async Task<Unit> Handle(Command command, CancellationToken cancellationToken)
             {
-                var technology =
-                    await context.Technologies.FirstOrDefaultAsync(x => x.Id == command.Technology.Id, cancellationToken);
+                var stream =
+                    await context.Streams.FirstOrDefaultAsync(x => x.Code.Equals(command.Stream.Code),
+                        cancellationToken);
 
-                if (technology == null)
+                if (stream == null)
                 {
-                    throw new NotFoundException<Technology>($"id {command.Technology.Name}");
+                    throw new NotFoundException<Stream>($"id {command.Stream.Code}");
                 }
 
-                mapper.Map(command.Technology, technology);
+                mapper.Map(command.Stream, stream);
                 await context.SaveChangesAsync(cancellationToken);
                 return Unit.Value;
             }

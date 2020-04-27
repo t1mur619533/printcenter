@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PrintCenter.Data;
 using PrintCenter.Domain.Exceptions;
+using PrintCenter.Shared;
 
 namespace PrintCenter.Domain.Users
 {
@@ -47,9 +48,7 @@ namespace PrintCenter.Domain.Users
                 }
 
                 context.Users.Remove(user);
-
                 await context.SaveChangesAsync(cancellationToken);
-                
                 return Unit.Value;
             }
         }

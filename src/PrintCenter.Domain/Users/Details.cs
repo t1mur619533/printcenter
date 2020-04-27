@@ -6,12 +6,13 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PrintCenter.Data;
 using PrintCenter.Domain.Exceptions;
+using PrintCenter.Shared;
 
 namespace PrintCenter.Domain.Users
 {
     public class Details
     {
-        public class Query : IRequest<UserEnvelope>
+        public class Query : IRequest<UserDetail>
         {
             public string Login { get; set; }
 
@@ -29,7 +30,7 @@ namespace PrintCenter.Domain.Users
             }
         }
 
-        public class QueryHandler : IRequestHandler<Query, UserEnvelope>
+        public class QueryHandler : IRequestHandler<Query, UserDetail>
         {
             private readonly DataContext context;
             private readonly IMapper mapper;
@@ -40,7 +41,7 @@ namespace PrintCenter.Domain.Users
                 this.mapper = mapper;
             }
 
-            public async Task<UserEnvelope> Handle(Query query, CancellationToken cancellationToken)
+            public async Task<UserDetail> Handle(Query query, CancellationToken cancellationToken)
             {
                 var user = await context.Users
                     .Include(u => u.UserTechnologies)
@@ -53,7 +54,7 @@ namespace PrintCenter.Domain.Users
                     throw new NotFoundException<User>(query.Login);
                 }
 
-                return new UserEnvelope(mapper.Map<User>(user), user.Technologies);
+                return mapper.Map<UserDetail>(user);
             }
         }
     }

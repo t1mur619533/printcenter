@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Extensions;
 using PrintCenter.Data.Models;
 using PrintCenter.Domain.Users;
+using PrintCenter.Shared;
 
 namespace PrintCenter.Api.Controllers
 {
@@ -24,9 +25,9 @@ namespace PrintCenter.Api.Controllers
         }
 
         [HttpPost]
-        public async Task Post([FromBody] Create.Command command)
+        public async Task Post([FromBody] Shared.User user)
         {
-            var created = await mediator.Send(command);
+            var created = await mediator.Send(new Create.Command(user));
             await mediator.Publish(new Create.Notification(created));
         }
 
@@ -39,22 +40,22 @@ namespace PrintCenter.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<UsersEnvelope> Get([FromQuery] int? limit, [FromQuery] int? offset)
+        public async Task<UsersEnvelope> Get([FromQuery] int limit, [FromQuery] int offset)
         {
             return await mediator.Send(new List.Query(limit, offset));
         }
 
 
         [HttpGet("{login}")]
-        public async Task<UserEnvelope> Get(string login)
+        public async Task<UserDetail> Get(string login)
         {
             return await mediator.Send(new Details.Query(login));
         }
 
         [HttpPut]
-        public async Task Edit([FromBody] Edit.Command command)
+        public async Task Edit([FromBody] Shared.User user)
         {
-            await mediator.Send(command);
+            await mediator.Send(new Edit.Command(user));
         }
 
         [HttpDelete("{login}")]

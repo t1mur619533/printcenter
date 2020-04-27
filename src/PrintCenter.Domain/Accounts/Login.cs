@@ -9,28 +9,33 @@ using PrintCenter.Data;
 using PrintCenter.Data.Models;
 using PrintCenter.Domain.Exceptions;
 using PrintCenter.Infrastructure.Security;
+using PrintCenter.Shared;
+using User = PrintCenter.Data.Models.User;
 
 namespace PrintCenter.Domain.Accounts
 {
     public class Login
     {
-        public class Command : IRequest<AccountEnvelope>
+        public class Command : IRequest<Account>
         {
-            public string Login { get; set; }
+            public LoginData LoginData { get; set; }
 
-            public string Password { get; set; }
+            public Command(LoginData loginData)
+            {
+                LoginData = loginData;
+            }
         }
 
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
-                RuleFor(x => x.Login).NotNull().NotEmpty();
-                RuleFor(x => x.Password).NotNull().NotEmpty();
+                RuleFor(x => x.LoginData.Login).NotNull().NotEmpty();
+                RuleFor(x => x.LoginData.Password).NotNull().NotEmpty();
             }
         }
 
-        public class Handler : IRequestHandler<Command, AccountEnvelope>
+        public class Handler : IRequestHandler<Command, Account>
         {
             private readonly DataContext context;
             private readonly IMapper mapper;
@@ -46,16 +51,16 @@ namespace PrintCenter.Domain.Accounts
                 this.jwtTokenGenerator = jwtTokenGenerator;
             }
 
-            public async Task<AccountEnvelope> Handle(Command command, CancellationToken cancellationToken)
+            public async Task<Account> Handle(Command command, CancellationToken cancellationToken)
             {
                 var user = await context.Users.AsNoTracking()
-                    .SingleOrDefaultAsync(x => x.Login == command.Login, cancellationToken);
+                    .SingleOrDefaultAsync(x => x.Login.Equals(command.LoginData.Login), cancellationToken);
                 if (user == null)
                 {
                     throw new InvalidArgumentException("Invalid login / password.");
                 }
 
-                if (passwordHasher.VerifyHashedPassword(user, user.PasswordHash, command.Password) ==
+                if (passwordHasher.VerifyHashedPassword(user, user.PasswordHash, command.LoginData.Password) ==
                     PasswordVerificationResult.Failed)
                 {
                     throw new InvalidArgumentException("Invalid login / password.");
@@ -73,8 +78,7 @@ namespace PrintCenter.Domain.Accounts
 
                 var account = mapper.Map<Account>(user);
                 account.Token = jwtTokenGenerator.CreateToken(user.Login, user.Role.ToString());
-
-                return new AccountEnvelope(account);
+                return account;
             }
         }
     }

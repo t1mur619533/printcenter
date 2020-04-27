@@ -4,22 +4,21 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PrintCenter.Data;
 using PrintCenter.Domain.Exceptions;
-using PrintCenter.Shared;
 
-namespace PrintCenter.Domain.Technologies
+namespace PrintCenter.Domain.Streams
 {
     public class Delete
     {
         public class Command : IRequest
         {
-            public Command(int id)
-            {
-                Id = id;
-            }
+            public string Code { get; set; }
 
-            public int Id { get; set; }
+            public Command(string code)
+            {
+                Code = code;
+            }
         }
-        
+
         public class QueryHandler : IRequestHandler<Command>
         {
             private readonly DataContext context;
@@ -31,14 +30,14 @@ namespace PrintCenter.Domain.Technologies
 
             public async Task<Unit> Handle(Command command, CancellationToken cancellationToken)
             {
-                var technology = await context.Technologies.FirstOrDefaultAsync(x => x.Id == command.Id, cancellationToken);
-
-                if (technology == null)
+                var stream =
+                    await context.Streams.FirstOrDefaultAsync(x => x.Code.Equals(command.Code), cancellationToken);
+                if (stream == null)
                 {
-                    throw new NotFoundException<Technology>($"id {command.Id}");
+                    throw new NotFoundException<Shared.Stream>($"id {command.Code}");
                 }
 
-                context.Technologies.Remove(technology);
+                context.Streams.Remove(stream);
                 await context.SaveChangesAsync(cancellationToken);
                 return Unit.Value;
             }

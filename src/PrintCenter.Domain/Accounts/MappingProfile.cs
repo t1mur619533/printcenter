@@ -1,4 +1,5 @@
 using AutoMapper;
+using PrintCenter.Shared;
 
 namespace PrintCenter.Domain.Accounts
 {

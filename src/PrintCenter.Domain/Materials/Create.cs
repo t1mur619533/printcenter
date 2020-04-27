@@ -8,51 +8,31 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PrintCenter.Data;
 using PrintCenter.Domain.Exceptions;
+using PrintCenter.Shared;
 
 namespace PrintCenter.Domain.Materials
 {
     public class Create
     {
-        public class MaterialDto
-        {
-            public string Name { get; set; }
-
-            public double Parameter { get; set; }
-
-            public string Unit { get; set; }
-
-            public decimal Price { get; set; }
-
-            public string Description { get; set; }
-
-            public double Count { get; set; }
-
-            public double NormalCount { get; set; }
-
-            public double MinimalCount { get; set; }
-        }
-
-        public class MaterialDtoValidator : AbstractValidator<MaterialDto>
-        {
-            public MaterialDtoValidator()
-            {
-                RuleFor(material => material.Name).NotNull().NotEmpty();
-                RuleFor(material => material.Parameter).NotEqual(0.0);
-                RuleFor(material => material.Unit).NotNull().NotEmpty();
-                RuleFor(material => material.Price).NotEqual(0.0m);
-            }
-        }
-
         public class Command : IRequest<Unit>
         {
-            public MaterialDto MaterialDto { get; set; }
+            public Material Material { get; set; }
+
+            public Command(Material material)
+            {
+                Material = material;
+            }
         }
 
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
-                RuleFor(x => x.MaterialDto).NotNull().SetValidator(new MaterialDtoValidator());
+                RuleFor(x => x.Material).NotNull();
+                RuleFor(x => x.Material.Name).NotNull().NotEmpty();
+                RuleFor(x => x.Material.Parameter).NotEqual(0.0);
+                RuleFor(x => x.Material.Unit).NotNull().NotEmpty();
+                RuleFor(x => x.Material.Price).NotEqual(0.0m);
             }
         }
 
@@ -69,17 +49,16 @@ namespace PrintCenter.Domain.Materials
 
             public async Task<Unit> Handle(Command command, CancellationToken cancellationToken)
             {
-                if (await context.Materials.Where(x => x.Name == command.MaterialDto.Name && Math.Abs(x.Parameter - command.MaterialDto.Parameter) < 0.001).AnyAsync(cancellationToken))
+                if (await context.Materials
+                    .Where(x => x.Name == command.Material.Name &&
+                                Math.Abs(x.Parameter - command.Material.Parameter) < 0.001).AnyAsync(cancellationToken))
                 {
-                    throw new DuplicateException<Material>(command.MaterialDto.Name);
+                    throw new DuplicateException<Material>(command.Material.Name);
                 }
 
-                var material = mapper.Map<Data.Models.Material>(command.MaterialDto);
-
+                var material = mapper.Map<Data.Models.Material>(command.Material);
                 await context.Materials.AddAsync(material, cancellationToken);
-
                 await context.SaveChangesAsync(cancellationToken);
-
                 return Unit.Value;
             }
         }

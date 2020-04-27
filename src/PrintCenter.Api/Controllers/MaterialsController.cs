@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PrintCenter.Domain.Materials;
+using PrintCenter.Shared;
 
 namespace PrintCenter.Api.Controllers
 {
@@ -17,27 +18,27 @@ namespace PrintCenter.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<MaterialsEnvelope> Get([FromQuery] int? limit, [FromQuery] int? offset)
+        public async Task<MaterialsEnvelope> Get([FromQuery] int limit, [FromQuery] int offset)
         {
             return await mediator.Send(new List.Query(limit, offset));
         }
         
         [HttpGet("{id}")]
-        public async Task<MaterialEnvelope> Get(int id)
+        public async Task<Material> Get(int id)
         {
             return await mediator.Send(new Details.Query(id));
         }
 
         [HttpPost]
-        public async Task Create([FromBody]Create.Command command)
+        public async Task Create([FromBody] Material material)
         {
-            await mediator.Send(command);
+            await mediator.Send(new Create.Command(material));
         }
         
         [HttpPut("{id}")]
-        public async Task Edit(int id, [FromBody]Edit.Command command)
+        public async Task Edit(int id, [FromBody] Material material)
         {
-            command.Id = id;
+            var command = new Edit.Command(material) {Material = {Id = id}};
             await mediator.Send(command);
         }
         

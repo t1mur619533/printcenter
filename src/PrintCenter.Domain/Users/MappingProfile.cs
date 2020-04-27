@@ -1,4 +1,5 @@
 using AutoMapper;
+using PrintCenter.Shared;
 
 namespace PrintCenter.Domain.Users
 {
@@ -6,12 +7,9 @@ namespace PrintCenter.Domain.Users
     {
         public MappingProfile()
         {
-            CreateMap<Create.Command, Data.Models.User>(MemberList.None);
             CreateMap<Data.Models.User, User>(MemberList.None);
-            CreateMap<Data.Models.User, User>(MemberList.None);
-            CreateMap<Data.Models.User, UserEnvelope>(MemberList.None)
-                .ForMember(envelope => envelope.User, cfg => cfg.MapFrom(user => user))
-                .ForMember(envelope => envelope.Technologies, cfg => cfg.MapFrom(user => user.Technologies));
+            CreateMap<Data.Models.User, UserDetail>(MemberList.None)
+                .ForMember(detail => detail.Technologies, cfg => cfg.MapFrom(user => user.Technologies));
         }
     }
 }

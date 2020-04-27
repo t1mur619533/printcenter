@@ -16,6 +16,13 @@
   <ItemGroup>
     <ProjectReference Include="..\PrintCenter.Data\PrintCenter.Data.csproj" />
     <ProjectReference Include="..\PrintCenter.Infrastructure\PrintCenter.Infrastructure.csproj" />
+    <ProjectReference Include="..\PrintCenter.Shared\PrintCenter.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Invoices\" />
+    <Folder Include="Plans\" />
+    <Folder Include="Requests\" />
   </ItemGroup>
 
 </Project>
