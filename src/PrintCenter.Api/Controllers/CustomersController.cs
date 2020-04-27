@@ -50,10 +50,10 @@ namespace PrintCenter.Api.Controllers
         }
         
         [HttpPut("{id}")]
-        public async Task Edit(int id, [FromBody]Edit.Command command)
+        public async Task<int> Edit(int id, [FromBody]Edit.Command command)
         {
             command.Id = id;
-            await mediator.Send(command);
+            return await mediator.Send(command);
         }
 
         [HttpDelete("{id}")]

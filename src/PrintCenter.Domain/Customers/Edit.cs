@@ -13,31 +13,26 @@ namespace PrintCenter.Domain.Customers
 {
     public class Edit
     {
-        public class CustomerDto
+        public class Command : IRequest<int>
         {
+            public int Id { get; set; }
+            
             public string Name { get; set; }
 
             public string Description { get; set; }
-        }
-
-        public class Command : IRequest<Unit>
-        {
-            public CustomerDto CustomerDto { get; set; }
-            public int Id { get; set; }
         }
         
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
-                RuleFor(x => x.CustomerDto).NotNull();
-                RuleFor(x => x.CustomerDto.Name).NotNull().NotEmpty();
-                RuleFor(x => x.CustomerDto.Name).Length(1, 255).WithMessage("Имя должно быть не короче 1 символа и не длиннее 255 символов");
-                RuleFor(x => x.CustomerDto.Description).Length(0, 255).WithMessage("Описание должно быть не длиннее 255 символов");
+                RuleFor(x => x.Name).NotNull().NotEmpty();
+                RuleFor(x => x.Name).Length(1, 255).WithMessage("Имя должно быть не короче 1 символа и не длиннее 255 символов");
+                RuleFor(x => x.Description).Length(0, 255).WithMessage("Описание должно быть не длиннее 255 символов");
             }
         }
         
-        public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command, int>
         {
             private readonly DataContext context;
             private readonly IMapper mapper;
@@ -48,7 +43,7 @@ namespace PrintCenter.Domain.Customers
                 this.mapper = mapper;
             }
 
-            public async Task<Unit> Handle(Command command, CancellationToken cancellationToken)
+            public async Task<int> Handle(Command command, CancellationToken cancellationToken)
             {
                 var customer = await context.Customers
                     .Where(x => x.Id == command.Id)
@@ -59,11 +54,11 @@ namespace PrintCenter.Domain.Customers
                     throw new NotFoundException<Customer>($"id {command.Id}");
                 }
                 
-                mapper.Map(command.CustomerDto, customer);
+                mapper.Map(command, customer);
 
                 await context.SaveChangesAsync(cancellationToken);
 
-                return Unit.Value;
+                return customer.Id;
             }
         }
     }
