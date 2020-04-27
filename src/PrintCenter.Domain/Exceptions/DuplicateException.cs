@@ -11,7 +11,7 @@ namespace PrintCenter.Domain.Exceptions
 
     public class DuplicateException<T> : DuplicateException
     {
-        public DuplicateException(string name) : base($"{nameof(T)} '{name}' already exits.")
+        public DuplicateException(string name) : base($"{typeof(T).Name} '{name}' already exits.")
         {
         }
     }
