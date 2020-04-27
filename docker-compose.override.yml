@@ -16,7 +16,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8000
-      - ApiUrl=api:5000
+      - ApiUri=api:5000
     ports:
       - "8000:8000"
     volumes:
