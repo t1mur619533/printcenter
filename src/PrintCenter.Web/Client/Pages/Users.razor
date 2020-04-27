@@ -8,27 +8,29 @@
 
 @if (users == null)
 {
-    <p><em>Loading...</em></p>
+    <p>
+        <em>Loading...</em>
+    </p>
 }
 else
 {
     <table class="table">
         <thead>
-            <tr>
-                <th>Логин</th>
-                <th>ФИО</th>
-                <th>Роль</th>
-            </tr>
+        <tr>
+            <th>Логин</th>
+            <th>ФИО</th>
+            <th>Роль</th>
+        </tr>
         </thead>
         <tbody>
-            @foreach (var user in users)
-            {
-                <tr>
-                    <td>@user.Login</td>
-                    <td>@user.Name @user.Surname</td>
-                    <td>@user.Role</td>
-                </tr>
-            }
+        @foreach (var user in users)
+        {
+            <tr>
+                <td>@user.Login</td>
+                <td>@user.Name @user.Surname</td>
+                <td>@user.Role</td>
+            </tr>
+        }
         </tbody>
     </table>
 }
@@ -39,7 +41,6 @@ else
     protected override async Task OnInitializedAsync()
     {
         var usersEnvelope = await Http.GetJsonAsync<UsersEnvelope>("api/Users?limit=100");
-
         users = usersEnvelope.Model.ToArray();
     }
 
