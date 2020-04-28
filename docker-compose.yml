@@ -2,11 +2,11 @@ version: '3.4'
 
 networks:
   printcenter-dev:
-    driver: bridge 
+    driver: bridge
 
 services:
-  printcenter.api:
-    container_name: printcenter_container
+  api:
+    container_name: api
     image: ${DOCKER_REGISTRY-}printcenterapi
     depends_on:
       - "postgres"
@@ -17,7 +17,7 @@ services:
       - printcenter-dev
       
   postgres:
-    container_name: postgres_container
+    container_name: postgres
     image: postgres
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-printcenter}
@@ -33,7 +33,7 @@ services:
     restart: unless-stopped
   
   pgadmin:
-    container_name: pgadmin_container
+    container_name: pgadmin
     image: dpage/pgadmin4
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-printcenter@pgadmin.org}
@@ -45,6 +45,17 @@ services:
     networks:
       - printcenter-dev
     restart: unless-stopped
+
+  web:
+    container_name: web
+    image: ${DOCKER_REGISTRY-}printcenterwebserver
+    depends_on:
+      - "postgres"
+    build:
+      context: .
+      dockerfile: src/PrintCenter.Web/Server/Dockerfile
+    networks:
+      - printcenter-dev
 
 volumes:
     postgres:

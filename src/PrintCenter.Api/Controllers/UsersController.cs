@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Extensions;
 using PrintCenter.Data.Models;
@@ -14,7 +13,7 @@ namespace PrintCenter.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = nameof(Role.SuperAdmin))]
+    //[Authorize(Roles = nameof(Role.SuperAdmin))]
     public class UsersController : ControllerBase
     {
         private readonly IMediator mediator;

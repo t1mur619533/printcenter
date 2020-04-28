@@ -16,7 +16,9 @@ x64/
 x86/
 bld/
 /src/*/[Bb]in/
+/src/*/*/[Bb]in/
 /src/*/[Oo]bj/
+/src/*/*/[Oo]bj/
 /tests/*/[Oo]bj/
 [Ll]og/
 /builds/

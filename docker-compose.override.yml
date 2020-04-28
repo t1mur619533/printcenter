@@ -1,7 +1,7 @@
 version: '3.4'
 
 services:
-  printcenter.api:
+  api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:5000
@@ -9,6 +9,16 @@ services:
       - Secret=printcenterprintcenterprintcenterprintcenterprintc
     ports:
       - "5000:5000"
+    volumes:
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      - /app/Logs
+  web:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8000
+      - ApiUri=http://localhost:5000
+    ports:
+      - "8000:8000"
     volumes:
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
       - /app/Logs
